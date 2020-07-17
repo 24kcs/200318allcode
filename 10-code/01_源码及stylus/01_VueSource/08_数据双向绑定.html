@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>06_模板解析_一般指令</title>
+  <script src="./js/mvvm.js"></script>
+  <script src="./js/compile.js"></script>
+  <script src="./js/observer.js"></script>
+  <script src="./js/watcher.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <input type="text" v-model="msg">
+    <p>{{msg}}</p>
+  </div>
+  <script type="text/javascript">
+    const vm = new MVVM({
+      el: '#app',
+      data: {
+        msg: '哈哈'
+      }
+    })
+    // dep和watcher关系:1对多的关系
+    /*
+
+      谈谈你对vue中的双向数据绑定的理解
+      Vue中是有双向数据绑定的(单向数据流),
+
+      在实例化MVVM的时候,首先内部会进行数据代理操作,然后进行数据劫持操作,最后开始进行模版的解析操作,此时会实例化Compile对象,在其构造函数内部,先创建文档碎片对象,获取div容器对象,把该容器对象中所有的节点全部的扔进文档碎片对象中,此时在内存中开始进行模版解析操作,都是在init方法内部实现(compileElement方法中),遍历文档碎片对象中所有的子节点,判断每个节点是标签节点还是文本节点,如果是标签节点,先获取该标签上所有的属性,判断该属性是不是vue的指令(主要看该属性是不是以v-开头),如果是vue的指令,还要判断该指令是不是普通指令,如果是普通指令会通过compileUtil对象中的相关方法调用bind方法,
+      然后会通过addEventListener方法为当前的文本框绑定一个input事件
+      此时如果在页面的文本框标签中输入内容(新内容,意味着修改了文本框的显示内容),立刻的触发文本框的input事件,
+      获取当前文本框的value属性,和绑定在文本框的msg表达式的值做对比,是否一致(数据是否发生了变化),如果发生了变化,马上修改vm中当前的表达式的值,就会进入到mvvm.js中的set方法,就会进入到observer.js中的set方法,内部再次的对比,文本框的value属性和msg表达式的值是否一致,如果不一致立刻让当前的属性对应的dep对象立刻的通知dep对象对应的所有的watcher对象,调用update方法进行更新数据操作,内部也会再次的建立dep和watcher的关系,从而实现新的数据绑定操作,最后依然会调用compile.js中updater对象中的相关方法(modelUpdater方法),进行数据的更新
+
+      
+      
+      
+      内部调用updater对象中的相关的方法,进行表达式msg的内容替换操作,然后 还需要把标签上所有的属性全部的进行删除
+    此时,都是在内存中完成,最终需要把解析后的文档碎片对象加入到div容器中
+
+
+
+     普通指令解析:
+       1. 实例化MVVM内部
+       2. 实例化Compile编译对象内部
+       3. 创建文档碎片对象---内存
+       4. 遍历div容器中所有的子节点放在文档碎片对象中 
+       5. 获取标签节点及与该节点的所有的属性
+       6. 判断该属性是不是指令及是不是普通指令
+       7. 如果是普通指令,最终调用bind方法,为文本框 绑定input事件
+       8. 如果数据变化,让当前的属性对应的dep通知对应的watcher进行数据更新
+       9. 最后调用updater对象中的相关方法
+
+
+    */
+
+
+  </script>
+</body>
+
+</html>

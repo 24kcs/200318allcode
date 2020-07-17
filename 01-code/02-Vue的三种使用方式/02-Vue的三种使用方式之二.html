@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <!--第二种:github搜索Vue,然后找到源码,找到里面的dist目录,下载里面的vue.js文件,通过本地引入:-->
+  <script src="../js/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <p>{{msg}}</p>
+  </div>
+  <script type="text/javascript">
+    // 演示插值语法
+    const vm = new Vue({
+      el:'#app', // 目的:找到html的div容器对象,通过选择器的方式
+      data:{
+        msg:'窗前明月光,强哥去开窗,遇到一耳光,牙齿掉光光'
+      }
+    })
+  </script>
+</body>
+
+</html>

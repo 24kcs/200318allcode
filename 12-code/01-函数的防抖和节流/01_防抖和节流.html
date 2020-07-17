@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+</head>
+
+<body>
+  <button id="btn1">防抖效果</button>
+  <button id="btn2">节流效果</button>
+  <script type="text/javascript">
+    /*
+        函数节流:首先执行一次,然后在间隔时间再执行
+        在函数需要频繁触发的时候,函数执行一次后,只有大于设定的执行周期后才会执行下一次,适合多次事件按照时间分配来触发
+        应用的场景:
+        窗口的调用,页面的滚动,DOM的元素的拖拽(mounsemove),疯狂的抢购(mounsedown)
+  
+        函数防抖:无论多少次的调用,只是最后一次执行
+        在函数需要频繁触发的时候,在规定的时间内,只能让最后一次是生效的,之前都不触发
+        应用的场景:
+        实时的搜索联想:keyup
+        文本框输入验证(输入内容,需要发送ajax请求)
+  
+        无论是节流还是防抖,最后都会返回一个回调
+    */
+    // 节流
+    function throttle(callback, time) {
+      // 开始的时间
+      let start = 0
+      return function (...args) {
+        console.log('throttle执行了...')
+        // 当前时间
+        const current = Date.now()
+        if (current - start > time) {
+          // 重新初始化开始时间
+          start = current
+          callback.apply(this, args)
+        }
+      }
+    }
+    // 防抖
+    function debounce(callback, time) {
+      return function (...args) {
+        console.log('debounce事件触发')
+        // 判断当前定时器的id是否存在,存在则删除
+        if (callback.timeId) {
+          clearTimeout(callback.timeId)
+        }
+        // 重新接收定时器的id,保存
+        callback.timeId = setTimeout(() => {
+          // 先清理定时器
+          delete callback.timeId
+          callback.apply(this, args)
+        }, time);
+      }
+    }
+
+    function callback() {
+      console.log('我被点了')
+    }
+    document.getElementById('btn1').onclick = throttle(callback, 2000)
+    document.getElementById('btn2').onclick = debounce(callback, 2000)
+
+    // document.getElementById('btn1').onclick = callback
+    // document.getElementById('btn2').onclick = callback
+  </script>
+</body>
+
+</html>

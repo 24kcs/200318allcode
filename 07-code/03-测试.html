@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="./vue.js"></script>
+  <style type="text/css">
+    .cls1 {
+      color: green;
+    }
+
+    .cls2 {
+      background-color: yellow;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <!-- 兴趣:
+    <input type="checkbox" v-model="msg" value="play" /> 玩
+    <input type="checkbox" v-model="msg" value="eat" /> 吃 -->
+    <!-- <ul>
+      <li v-for="(value,key,index) in obj" :key="index">
+        {{key}}-----{{value}}----{{index}}
+      </li>
+      <p class="cls1" :class="myCls">这是一个p</p>
+    </ul>
+
+    <hr>
+    <input type="text" v-model="msg" />
+    <p>{{msg2}}</p> -->
+    <!-- <p v-on:click="showMsg">这是一个p</p> -->
+
+    <!-- <p :class="myCls">这是一个p</p>
+    <p :style="{color:myColor,fontSize:mySize }">这是一个p</p>
+    <p :class="myCls" class="cls2">这也是一个p</p> -->
+
+    <!-- <p v-on:threeclick="showMsg">这是一个p</p>  自己定义的事件----自定义事件,自定义事件不会出现在标签,而是在组件中使用
+    <Header v-on:threeclick="showMsg" />  组件内部可以通过$emit()分发事件 -->
+
+    <button id="btn">按钮</button>
+    <div id="demo">
+      <p id="p1">这是一个p标签</p>
+    </div>
+    
+  </div>
+
+  <script type="text/javascript">
+    // 直接操作DOM元素
+    document.getElementById('btn').onclick=function(){
+      document.getElementById('p1').innerHTML='哈哈'
+    }
+    // 通过文档碎片对象操作p标签
+    const fragment = document.createDocumentFragment()
+    // 获取html容器
+    const divObj = document.getElementById('demo')
+    var child
+    // 循环遍历的把div中每个节点全都加入到文档碎片对象中
+    while(child= divObj.firstChild){
+      fragment.appendChild(child) // 此时都在内存---相当于剪切
+    }
+    // 把文档碎片对象中的所有的节点遍历
+    fragment.childNodes.forEach(node=>{
+      node.innerHTML='嘎嘎'
+    })
+    // 再把文档碎片对象加入到div中
+    divObj.appendChild(fragment)
+
+
+
+
+
+
+
+    // const vm = new Vue({
+    //   el:'#app',
+    //   data:{
+    //     myCls:'cls1',
+    //     myColor:'red',
+    //     mySize:'20px'
+    //   }
+    // })
+
+    // var obj={
+    //   name:'小蜜蜂',
+    //   age:20
+    // }
+    // // 我想知道当前的这个对象中有哪些属性
+    // const keys = Object.keys(obj)
+    // console.log(keys)
+
+
+    // const dog = {
+    //   // firstName: '真好'
+    // }
+    // Object.defineProperty(dog, 'text', {
+    //   configurable: false, // 默认是false,表示的是该属性不能被删除
+    //   enumerable: false, // 不能被循环遍历
+    //   // value:'哈哈',
+    //   // writable:false, // 该属性的值不能被修改
+    //   // 设置get方法和set方法
+    //   get() {
+    //     // 可以把值给name属性,外部想要访问name属性的时候,就可以进来
+    //     return '嘎嘎'
+    //   },
+    //   set(val) {
+    //     // val----name属性的值
+    //     // this.firstName = val
+    //   }
+    // })
+
+    // console.log(dog.text)
+    // console.dir(dog)
+
+  //   var obj ={
+  //     name:'小白',
+  //     age:10
+  //   }
+  //   // 获取对象中的属性(可以被枚举遍历出来的)
+  //  const result = Object.keys(obj)
+  //  console.log(result)
+
+
+  // const vm = new Vue({
+  //   el:'#app',
+  //   methods:{
+  //     // 函数---点击事件的回调函数
+  //     showMsg(){
+  //       console.log('学习vue')
+  //     }
+  //   }
+  // })
+    // const vm = new Vue({
+    //   el: '#app',
+    //   data: {
+    //     // msg:['play','eat']
+    //     obj: {
+    //       name: '小明',
+    //       age: 18
+    //     },
+    //     myCls: 'cls2',
+    //     msg:'Hello'
+    //   },
+    //   computed: {
+    //     msg2(){
+    //       return this.msg.toUpperCase()
+    //     }
+    //   }
+    // })
+
+
+    // var obj
+    // obj={name:'小明'}
+    // console.log(obj)
+
+    // var num
+    // while(num=10){
+    //   console.log('哈哈')
+    //   num++
+    //   if(num===11){
+    //     break
+    //   }
+    // }
+    // console.log(num)
+  </script>
+</body>
+
+</html>

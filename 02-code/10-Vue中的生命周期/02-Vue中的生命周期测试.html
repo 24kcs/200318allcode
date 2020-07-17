@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+	<div id="app">
+
+		<button @click="clear">显示效果</button>
+		<button @click="update">更新数据</button>
+		<p v-show="isShow">日照香炉生紫烟,遥看情侣在林间</p>
+	</div>
+	<script type="text/javascript">
+		const vm = new Vue({
+			el: '#app',
+			data: {
+				isShow: false
+			},
+			// 8个生命周期回调函数---生命周期钩子----(11个,暂且讲8个)
+			// 1.数据初始化之前和数据初始化之后
+			// 2.页面加载前和页面加载后
+			// 3.页面更新前和页面更新后
+			// 4.销毁前和销毁后
+
+			// 数据初始化之前的生命周期钩子
+			beforeCreate() {
+				console.log('beforeCreate========' + this.isShow)
+			},
+			// 数据初始化之后的生命周期钩子
+			created() {
+				console.log('created========' + this.isShow)
+			},
+			// 页面加载(页面初始化,页面显示之前)之前
+			beforeMount() {
+				console.log('beforeMount=====页面初始化之前')
+			},
+			// 页面加载完毕后
+			mounted() { //=======用到最多的,发送异步请求的相关代码-----
+				console.log('mounted=====页面初始化之后')
+			},
+			// 页面更新之前
+			beforeUpdate() {
+				console.log('beforeUpdate=====页面更新之前', this.isShow)
+			},
+			// 页面更新之后
+			updated() {
+				console.log('updated=====页面更新之后', this.isShow)
+			},
+			// 实例销毁之前(组件销毁之前)
+			beforeDestroy() {
+				console.log('beforeDestroy=====组件销毁之前')
+			},
+			// 实例销毁之后(组件销毁之后)
+			destroyed() {
+				console.log('destroyed=====组件销毁之后')
+			},
+
+
+
+
+			methods: {
+				update() {
+					this.isShow = !this.isShow
+				},
+				clear(){
+					this.$destroy()
+				}
+			}
+		})
+	</script>
+</body>
+
+</html>

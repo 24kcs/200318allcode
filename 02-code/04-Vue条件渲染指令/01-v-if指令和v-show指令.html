@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/vue.js"></script>
+
+</head>
+
+<body>
+  <div id="app">
+    <!--方式1:使用v-if指令实现-->
+    <button @click="changeSeen">切换显示效果</button>
+    <p v-if="isSeen">我喜欢你</p>
+    <p v-else>你喜欢我</p>
+    <hr>
+    <!--方式2:使用v-show指令实现-->
+    <button @click="isShow=!isShow">切换显示效果</button>
+    <p v-show="isShow">我喜欢男人,渊哥说</p>
+  </div>
+  <script type="text/javascript">
+    // 需求:点击按钮,切换两对p标签的显示和隐藏操作
+    // 实例Vue的对象
+    const vm = new Vue({
+      el: '#app', // 根据选择器获取html容器对象
+      // 数据对象
+      data: {
+        // 属性，默认值是true
+        isSeen: true,
+        isShow:false
+      },
+      // 书写方法的对象
+      methods: {
+        // 点击按钮的点击事件的回调函数
+        changeSeen() {
+          // 设置当前的属性的值取反操作
+          // this--- 当前的Vue的实例对象
+          this.isSeen = !this.isSeen
+        }
+      }
+    })
+    // console.log(vm.data.isSeen)
+    // console.log(vm._data.isSeen)
+    // console.log(vm.$data.isSeen)
+
+
+
+
+    /*
+
+    v-if 是Vue中的条件渲染指令,通常可以单独使用,也可以配置v-else指令来使用
+    条件渲染指令:设置标签在页面中显示或者隐藏(注:v-if或者v-else设置标签显示或者隐藏,实例上是控制当前的标签在DOM树中存在或者不存在)
+    v-if指令可以单独使用
+    v-if指令可以配合v-else使用
+    v-if指令可以配置v-else-if指令使用(一会通过扩展讲解)
+
+    v-show 是Vue中的条件渲染指令,通常都是单独使用的,不需要配合其他的指令来使用
+    v-show 指令 设置标签在页面中显示或者隐藏,但是无论显示还是隐藏在DOM中都是存在的,另外使用v-show指令的标签主要是通过style属性中的display属性来控制其显示或者隐藏
+
+    标签上通过v-on指令来绑定标签的相关事件的时候,如果该事件对应的回调函数内部代码很少或者说仅仅是控制某个表达式的值,此时回调函数可以省略,直接设置该表达式的值即可
+
+    html容器中使用表达式的时候是不需要使用this的
+
+    小总结: 
+    v-if 和 v-show 之前的区别:
+    相同点: 都是Vue中的条件渲染指令,语法相同,都是控制标签在页面中展示或者隐藏操作的
+    不同点: 使用v-if指令的标签在隐藏的时候实际上是从DOM树中干掉了这个标签,使用v-show指令的标签最终是通过style属性中的display来进行控制隐藏或者显示的
+
+
+
+    isSeen 这个属性是定义在data对象中的,按理来说:应该通过vm.data.isSeen来访问,当时由于Vue中有数据代理,所以,isSeen可以直接通过vm来进行访问,当然如果在配置对象中的相关方法内部,可以通过this来直接访问
+    另外:外部是无法使用vm.data.isSeen来访问该属性的(内部通过数据代理实现,不允许这么操作)
+
+
+
+
+    数据代理:vm实例对象代理了data对象,代理者是vm,被代理者是data
+    数据代理如何实现? Vue的源码分析的时候进行讲解
+
+
+
+    */
+
+
+    // function Person(obj){
+    //   this.$data=obj.data
+    // }
+
+    // var per = new Person({
+    //  data:{
+    //    name:'小明'
+    //  }
+    // })
+    // console.log(per.data)
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>

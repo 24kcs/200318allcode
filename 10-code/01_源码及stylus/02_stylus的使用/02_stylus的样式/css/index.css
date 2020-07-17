@@ -1,0 +1,9 @@
+div {
+  width: 300px;
+  height: 250px;
+  border: 1px solid #008000;
+}
+div p {
+  color: #02a774;
+  font-size: 30px;
+}

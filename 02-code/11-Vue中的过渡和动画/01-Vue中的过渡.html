@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<style type="text/css">
+		/* 过渡的样式 */
+		.fade-enter,
+		.fade-leave-to{
+			opacity: 0;
+		}
+
+		.fade-enter-active,
+		.fade-leave-active{
+			transition: opacity 3s;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<button @click="isShow=!isShow">显示过渡效果</button>
+		<transition name="fade">
+			<p v-show="isShow">这是一个p</p>
+		</transition>
+
+	</div>
+
+	<script type="text/javascript">
+		const vm = new Vue({
+			el: '#app',
+			data: {
+				isShow: false
+			}
+		})
+
+
+		// 希望哪个标签有渐渐的过渡效果,那么就用<transition>进行包裹 ,并且设置name属性
+		// 组件其实也是标签,只不过是一种高级的标签
+
+		// 过渡的效果 显示(进入)有三个阶段 
+		// 	.fade-enter  显示的一开始的初始阶段
+		// .fade-enter-active 显示的时候的过渡的阶段
+		// .fade-enter-to 显示完毕的结束的阶段
+
+		// 过渡的效果  隐藏(离开)有三个阶段 
+		// .fade-leave 隐藏的一开始的初始阶段
+		// .fade-leave-active 隐藏的时候的过渡的阶段
+		// .fade-leave-to 隐藏完毕后的结束的阶段
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>07_数据劫持-数据绑定</title>
+  <!--
+    1. 数据绑定
+      * 初始化显示: 页面(表达式/指令)能从data读取数据显示 (编译/解析)
+      * 更新显示: 更新data中的属性数据==>页面更新
+  -->
+  <script src="./js/mvvm.js"></script>
+  <script src="./js/compile.js"></script>
+  <script src="./js/observer.js"></script>
+  <script src="./js/watcher.js"></script>
+
+
+</head>
+
+<body>
+
+
+
+  <div id="app">
+    <p>{{obj.age}}</p>
+    <p>{{obj.age}}</p>
+  </div>
+  <script type="text/javascript">
+
+    const vm = new MVVM({
+      el: '#app',
+      data: {
+        // msg: '男人不能说自己不行',
+        // age:10
+        obj: {
+          msg: '真好',
+          age: 10
+        }
+      }
+    })
+
+    /*
+
+
+      数据劫持:Vue中有数据劫持操作,在数据代理之后,模版解析之前发生
+      首先把vm中的data变量中的数据及当前的vm对象传入到observe函数中,该函数实现了数据劫持操作
+      该函数内部会判断传入进来的数据是不是一个对象,只有传入进来的是一个对象的情况才真正的进行劫持的操作,实例化Observer的对象(劫持实例对象),先把vm中的data变量保存到this(劫持实例对象)的data属性中,然后遍历的是vm中的data变量中的所有的属性,只要有属性,就有遍历操作,只要是有遍历,就会调用defineReactive方法,该方法的调用就干两件大事
+       1. 创建dep,建立依赖关系(只要有一个属性,就有一个dep对象(id,subs数组))
+          vm中的data有一个属性,我就创建dep
+       2. 把vm中的data变量中的属性,通过Object.defineProperty方法一个一个添加到劫持实例对象的data属性上
+
+
+       数据劫持
+       1. 实例化MVVM内部
+       2. 调用observe函数,传入data和vm
+       3. 内部在data是对象是对象情况下实例化Observer对象
+       4. Object.keys方法获取data中所有属性
+       5. 遍历所有的属性,创建dep对象
+       6. data中所有的属性通过Object.defineProperty方法添加到劫持实例对象的data属性中
+       总结一句话:只要vm的data中有一个属性,就会创建一个dep
+
+       data对象中定义的叫属性
+       html容器中用到的属性叫表达式
+
+       监视操作:Vue中在数据劫持操作后开始进入模版解析操作,在解析的过程中必然会用到表达式(表达式肯定要存在的),只要有表达式的存在,都会直接或者间接的调用bind方法,bind方法的内部就会创建Watcher实例对象,
+       html模版中只要有一个表达式,就会创建一个Watcher实例对象
+
+
+
+       dep和watcher之间只有建立了关系,最终才能够实现数据劫持及绑定的效果
+       1对1关系: 一个dep对应着一个watcher(data中只有一个属性,模版中只用到了一个表达式)
+       1对多关系: 一个dep对应着多个watcher(data中只有一个属性,模版中用到了多个表达式)
+       多对1关系: 多个dep对应着一个watcher(data中有多个属性,模版中用到了一个表达式)
+       多对多关系: 多个dep对应着多个watcher(data中有多个属性,模版中用到了多个表达式)
+
+       dep和watcher关系是如何建立的?
+
+       在Vue模版解析的时候,只要html模版中用到了表达式,此时会进入到bind方法内部,内部会创建Watcher的实例对象,
+       内部会判断当前传入进来的表达式是函数还是一个普通的表达式,而且需要获取当前这个表达式msg的值,此时会调用parseGetter中的返回值(该返回值是一个函数),该函数内会通过遍历的方式来获取vm中的data对象中的相关的属性的值
+       ，此时通过vm.msg的方式来获取该表达式的值的时候,由于是要获取msg的值,会自动的进入到mvvm.js的Object.defineProperty方法中的get方法内部,由于之前在数据劫持的时候,vm中的data和observer中的data,已经通过创建dep的方式来建立了依赖关系,此时也会自动的进入到observer.js文件中的Object.defineProperty方法中的get方法内部。
+       在当前的get方法内部正式获取表达式的值之前,先判断Dep.target中是否有值(是否有watcher对象),如果该对象存在则直接调用dep的depend方法,该方法内部会调用watcher的addDep方法(该方法是核心方法),此时内部会建立dep对象和watcher对象的关系,把watcher对象添加到dep对象中,把dep添加到watcher中,此时建立了关系,并且最终把表达式的值在observer.js文件中的Object.defineProperty方法中的get方法中进行返回
+
+
+       面试题:谈谈你对数据绑定的理解和看法
+       面试题:谈谈你对MVVM的数据劫持的理解!
+       Vue中有数据劫持操作,在数据代理之后,此时开始进行数据劫持操作,数据劫持结束后开始进行模版解析,模版解析内部的bind方法中开始进行监视操作.
+       首先,来谈谈数据劫持,然后再说监视操作
+       1. 数据劫持: 首先调用observe函数,传入vm中的data对象及vm对象,内部判断当前传入的data数据是否是一个对象,如果是一个对象则实例化Observer劫持实例对象,然后内部开始循环遍历vm中的data中所有的属性,每一次遍历的时候都会创建dep对象,vm中的data有多少个属性就会创建对应个数的dep对象,紧接着通过Object.defineProperty方法为劫持实例对象的data属性添加vm中data中的每个属性,以及重写get方法和set方法,完毕后,此时数据劫持结束
+       2. 下面要做的就是模版解析操作,在内部只要是html模版中用到了表达式,就会执行bind方法,内部就会创建Watcher监视实例对象,内部会调用相关方法获取当前表达式的值,在获取当前表达式的值的时候需要通过vm对象来进行获取,此时会自动的进入到vm的数据代理的Object.defienProperty方法的get方法内部,就会自动的进入到数据劫持的Object.defineProperty方法的内部的get方法中,然后调用dep对象的depend方法,内部调用watcher的是实例对象的addDep方法,开始建立dep对象和watcher对象的关系,addDep方法是属于watcher实例对象的,内部在建立关系的时候先判断watcher对象的depIds属性中是否包含当前的dep的id,如果不存在则,把watcher添加到dep对象的subs数组中(dep中添加了watcher),然后再把当前的dep的id作为键,dep对象作为值以键值对的方式添加到watcher对象的depIds属性中(watcher中添加了dep).此时dep对象和watcher对象关系建立完毕，最后才把表达式的值进行返回
+       那么dep对象和watcher对象关系有如下几种:
+       1对1关系: 一个dep对应着一个watcher(data中只有一个属性,模版中只用到了一个表达式)
+       1对多关系: 一个dep对应着多个watcher(data中只有一个属性,模版中用到了多个表达式)
+       多对1关系: 多个dep对应着一个watcher(data中有多个属性,模版中用到了一个表达式)
+       多对多关系: 多个dep对应着多个watcher(data中有多个属性,模版中用到了多个表达式)
+
+       dep对象和watcher对象建立关系,也就实现了真正的数据绑定了
+
+
+       简版:数据劫持的时候,把vm中data对象中的属性通过遍历的方式添加到劫持对象的data属性中,遍历的时候会根据data中的属性创建对应个数的dep对象
+       然后在解析模版的时候,内部会在调用bind的时候创建Watcher的对象,内部获取表达式的之后最终会调用addDep的方法实现dep对象和watcher对象的关系的建立.从而实现真正的数据绑定(最好把dep对象和watcher对象的4种关系表述出来)
+
+
+
+
+
+
+    */
+
+  </script>
+</body>
+
+</html>

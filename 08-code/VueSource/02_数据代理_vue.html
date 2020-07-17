@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>02_数据代理</title>
+  <script src="./js/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+  </div>
+
+  <script type="text/javascript">
+    // Vue中有数据代理---证明
+    const vm = new Vue({
+      el:'#app',
+      data:{
+        msg:'随便'
+      }
+    })
+    // console.log(vm.data.msg) // 这样才是对的,但是为什么是报错,因为vm无法获取到data对象
+    // console.log(vm.msg) // 这是不对的 ,为什么? 可以使用,可以获取数据
+    // 当前的实例对象中没有data,上面的第一行代码就会报错
+    // console.log(vm)
+    // 下面的代码比较麻烦
+    // console.log(vm._data.msg)
+    // console.log(vm.$data.msg)
+
+    /*
+     至此: Vue中的data对象中的数据,可以直接通过Vue的实例对象进行访问,所以,Vue的实例对象代理了data对象,
+     data是被代理者,vm是代理者,所以,Vue中有数据代理
+     如何实现数据代理:通过分析MVVM来解决
+    
+    
+    */
+
+  </script>
+</body>
+
+</html>

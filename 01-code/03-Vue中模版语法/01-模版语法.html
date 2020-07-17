@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <!--插值语法:-->
+    <h2>{{msg}}</h2>
+    <h2>{{msg.toUpperCase()}}</h2>
+    <h2>{{msg.split(' ').reverse().join(' ')}}</h2>
+    <hr>
+    <!--强制数据绑定:标签上的一些属性的值能够动态的进行操作,但是需要Vue中的指令来实现-->
+    <!---->
+    <a v-bind:href="url">百度</a>
+
+    <!--强制数据绑定的这个指令的简写方式:     :属性名字="表达式"-->
+    <a :href="url">百度</a>
+
+    <!--强制数据绑定也可以这么用,临时加一个小例子-->
+
+    <!--v-model是数据绑定指令,用来在表单标签中使用-->
+    <!-- <input type="text" v-model="context">
+    <p>{{context}}</p> -->
+    <!--v-bind指令可以用在表单标签上,设置value属性的值变成动态的-->
+    <!-- <input type="text" :value="context"> -->
+    <hr>
+    <!--绑定事件监听-->
+    <button v-on:click="clickHandle1">超哥:吻我</button>
+    <button v-on:click="clickHandle2">峰哥:亲我</button>
+    <button v-on:click="clickHandle3">强哥:打我</button>
+
+    <hr>
+    <!--绑定事件监听的简写方式:-->
+    <button @click="clickHandle4">渊哥:皮鞭我</button>
+
+
+    <!--Vue中如何获取DOM元素-->
+    <!--点击按钮,修改p标签中的内容-->
+    <button @click="showMsg">显示效果</button>
+    <p ref="p1">今天天气格外好,超哥和峰哥来到桃花岛,看见强哥和渊哥在洗澡</p>
+
+
+  </div>
+  <script type="text/javascript">
+
+    // 实例化Vue
+    const vm = new Vue({
+      // 通过选择器获取html容器对象div
+      el: '#app',
+      // 数据对象,用来定义属性,内部的属性可以在html容器中以表达式的方式使用该
+      data: {
+        msg: 'What Are you No Sha lei',
+        url: 'http://www.baidu.com',
+        context:'哈哈,我又变帅了'
+      },
+      // 方法对象:本身是一个对象,内部主要写的就是方法的定义(回调函数的定义)
+      methods: {
+        clickHandle1:function(){
+          console.log('真香啊',this) // this 代表的是Vue的实例对象
+        },
+        clickHandle2:()=>{
+          console.log('峰哥:我喜欢男人',this) // this 代表的是window,并不推荐
+        },
+        clickHandle3(){
+          console.log('强哥:我喜欢峰哥',this)  // this 代表的是Vue的实例对象   推荐的写法
+        },
+        clickHandle4(){
+          console.log('渊哥,啊,刺激啊',this) // this 代表的是Vue的实例对象   推荐的写法
+        },
+        // 点击按钮,设置p标签中间的内容
+        showMsg(){
+          // 通过$refs对象获取p1标签,设置里面的内容
+          this.$refs.p1.innerHTML='真好'
+        }
+      }
+    })
+
+
+
+    /*
+        强制数据绑定:
+        为什么要有强制数据绑定? Vue搭建界面,离不开操作html标签,标签就有属性,属性中的值如果是动态的,那么操作起来会非常的方便,但是有很多的属性就是普通的标签的普通的属性,希望普通的属性中的数据也可以是动态的
+
+        强制数据绑定的解释:标签上的一些属性的值能够动态的进行操作,但是需要Vue中的指令来实现
+        如何使用强制数据绑定；
+        Vue中的指令； 在标签上如果看到了v-开头的,一般都是Vue的指令
+        强制数据绑定的指令:  v-bind
+
+        强制数据绑定语法：
+         v-bind:属性名字="表达式"
+        注意: 一般该属性的值需要动态的进行操作,需要使用v-bind指令,一般都是普通的标签上的属性使用v-bind指令比较多
+        html标签:表单标签和普通标签
+
+        强制数据绑定的指令:    v-bind:属性名字="表达式"   也可以简写    :属性名字="表达式"
+
+
+        绑定事件监听:
+        指令:
+        v-on:事件名字="回调函数"
+        事件名字:   原来DOM中书写 ----> onclick="" 在Vue中书写:    v-on:click="回调函数"  把DOM中的on干掉,然后的名字都是小写的
+        回调函数的书写:
+        需要在methods对象中进行书写,同时书写方式:
+          方式1:  clickHandle1:function(){}
+          方式2:   clickHandle2:()=>{}
+          方式3:   clickHandle3(){}   推荐的写法
+
+        绑定事件监听指令,可以简写  ----->   @事件名字="回调函数"   -----使用率很高
+           
+
+
+
+
+
+
+
+
+      data对象中定义的是属性和值的关系---->键值对的关系
+      data中的msg:叫属性
+      html容器中的插值语法中: msg---->表达式
+      为什么不同的位置要区分,叫法不同--->目的:为了后期分析Vue源码做准备
+      html容器中的插值语法中(双花括号中)的叫表达式
+      插值语法的使用总结:一般,插值语法用在成对的标签中间,更有意义
+
+
+      对象的作用:可以调用属性和方法
+      什么是对象?具有属性或者方法,特指的某个事物(看的见,或者是摸得到,或者是特指的某个东西)
+      (万物皆对象)
+      多个无序属性的集合
+
+      强制数据绑定指令:为一个html属性动态的绑定一个表达式,言外之意:该属性的值是动态的
+      v-bind:属性名字="表达式"
+      v-bind:  在Vue中叫指令(是Vue指令中其中的一个指令),该指令的作用:用来强制数据绑定的()
+      强制数据绑定的指令可以简写:
+      :属性名字="表达式"------>常用,推荐使用
+      如:    :href="url"
+
+      绑定事件监听指令:为一个html标签动态的绑定一个事件,言外之意:就是为html标签添加一个事件,该事件的回调函数需要在实例化Vue的配置对象中的methods对象中进行定义
+      v-on:事件名字   或者   v-on:事件类型
+      v-on:事件名字="回调函数"
+      v-on: 在Vue中叫指令(是Vue指令中的其中的一个指令),该指令的作用:用来绑定事件监听的
+      使用事件监听指令的时候的注意问题:
+       事件的名字都是原来DOM中的原生事件名字,但是事件名字是没有on的,而且都是小写的
+
+      绑定事件监听指令可以简写:
+      @事件名字="回调函数"-----常用,推荐使用
+      如:    @click="clickHandle4"
+
+
+      补充内容:
+      Vue中如何获取某个指定的DOM元素?
+      标签上添加一个ref="值"的属性,然后在对应的回调函数内部,使用this.$refs.值 可以获取
+      为什么是$开头,Vue中规定,$开头的是Vue实例对象来使用的,不是$开头的属性或者方法,通过Vue来使用的
+
+
+
+
+    */
+
+
+
+
+  </script>
+</body>
+
+</html>

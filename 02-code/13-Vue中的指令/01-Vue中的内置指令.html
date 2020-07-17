@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+	<div id="app">
+		<p>{{msg}}</p>
+		<hr>
+		<p v-html="msg"></p>
+		<hr>
+		<p v-text="content"></p>
+	</div>
+	<script type="text/javascript">
+		const vm = new Vue({
+			el: '#app',
+			data: {
+				msg: '<a href="http://www.baidu.com">百度</a>',
+				content:'真开心,今天作业才三遍'
+			}
+		})
+
+		/*
+
+			Vue中的指令:
+			1. 内置指令: Vue中自带的指令(面试题,写出Vue中常见的7个指令)
+				v-bind ,v-on ,v-model,v-if(v-else,v-else-if),v-show,v-for,v-html,v-text,后期还有
+				v-html指令:
+				 作用: 和DOM中的innerHTML效果一样(把标签以真正的页面效果进行展示)
+				v-text指令:
+				 作用:和DOM中的innerText或者textContent效果一样(用来展示文本内容的)
+			2. 自定义指令:用户自己定义的指令
+
+		*/
+
+
+	</script>
+</body>
+
+</html>

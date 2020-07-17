@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<style type="text/css">
+		p {
+			border: 1px solid red;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<p v-upper-text="msg"></p>
+		<p v-lower-text="msg"></p>
+	</div>
+	<hr>
+	<div id="app2">
+		<p v-upper-text="msg"></p>
+		<!-- <p v-lower-text="msg"></p> -->
+	</div>
+
+	<script type="text/javascript">
+
+		// 自定义指令:用户自己定义的指令
+		// 需求: 把文本内容,以大写的方式进行展示(通过指令的方式来实现)
+		// 自己定义指令来解决当前的需求
+		// 注册全局指令----------全局的方式来定义指令
+		// Vue.directive('指令的名字',回调函数)
+		// 指令如何使用? 标签上直接使用: v-自定义指令的名字="表达式"
+		Vue.directive('upper-text', function (el, binding) {
+			// el---就相当于上面的p标签(哪个标签用到了这个指令,el就是这个标签对象)
+			// bidning---对象,包含了指令相关的数据的对象容器
+			el.textContent = binding.value.toUpperCase()
+		})
+		const vm = new Vue({
+			el: '#app',
+			data: {
+				msg: 'what Are You No Sha Lei'
+			},
+			// 注册局部指令
+			directives: {
+				// 需求: 把文本内容,以小写的方式进行展示(通过指令的方式来实现)
+				'lower-text'(el, binding) {
+					el.textContent = binding.value.toLowerCase()
+				}
+			}
+		})
+		const vm2 = new Vue({
+			el: '#app2',
+			data: {
+				msg: 'Hello'
+			}
+		})
+
+
+
+
+
+
+		/**
+		 * Vue提供了自定义指令的方法
+		 * 1.注册全局指令
+		 * Vue.directive('指令名字',function(el,binding){})
+		 * 2.注册局部指令
+		 * 在Vue的配置中
+		 * directives:{
+		 * '指令名字'(el,binding){
+		 * el.innerHTML=binding.value.toUpperCase()
+		 * }
+		 * }
+		 *
+		 * el:element---指令属性所爱的标签对象
+		 * binding:包含指令相关数据的对象容器,里面有value值就是标签中的值
+		 * 区别:全局的指令作用范围更大,局部的指令只能在自己的包裹的标签中使用
+		 *
+		 *
+		 *
+		 */
+
+
+
+	</script>
+</body>
+
+</html>

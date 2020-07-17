@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+	<div id="app">
+		<fieldset>
+			<legend>数组数据更新操作</legend>
+			<button @click="addPerson">添加数据</button><br />
+			名字:<input type="text" v-model="perName" /><br />
+			年龄:<input type="text" v-model="age" /><br />
+			描述:<input type="text" v-model="desc" /><br />
+			<ul>
+				<li v-for="(per,index) in persons" :key="per.id">
+					索引:{{index}}---id:{{per.id}}---名字:{{per.name}}----年龄:{{per.age}}---描述:{{per.desc}}--
+					<button @click="delPerson(index)">删除</button>----
+					<button @click="updatePerson(index,{id:++perId,name:perName,age,desc})">修改</button>
+				</li>
+
+			</ul>
+		</fieldset>
+	</div>
+	<script type="text/javascript">
+
+		// 通过v-for指令遍历数据,并及时的展示数据
+
+		const vm = new Vue({
+			el: '#app',
+			data: {
+				perName: '', // 用来获取文本框中输入的名字
+				age: 0, // 用来获取文本框中输入的年龄
+				desc: '', // 用来获取文本框中输入的描述
+				perId: 10, // 用来添加人的这个数据的id值
+				persons: [
+					{ id: 1, name: '卡卡西', age: 18, desc: '很帅气的男人' },
+					{ id: 2, name: '自来也', age: 29, desc: '值的尊敬的男人' },
+					{ id: 3, name: '索隆', age: 17, desc: '很有毅力的男人' },
+					{ id: 4, name: '纲手', age: 32, desc: '很漂亮的女孩子' },
+					{ id: 5, name: '雏田', age: 16, desc: '很温柔的女孩子' }
+				]
+			},
+			methods: {
+				// 点击按钮添加人的信息数据
+				addPerson() {
+					// 1. 收集数据
+					const person = {
+						id: ++this.perId,
+						name: this.perName,
+						age: this.age,
+						desc: this.desc
+					}
+					// 2. 添加数据
+					this.persons.push(person)
+					// 3. 清空数据
+					this.perName = ''
+					this.age = ''
+					this.desc = ''
+				},
+				// 删除操作
+				delPerson(index) {
+					this.persons.splice(index, 1)
+				},
+				// 修改操作
+				updatePerson(index, per) {
+					this.persons[index].id = per.id
+					this.persons[index].name = per.name
+					this.persons[index].age = per.age
+					this.persons[index].desc = per.desc
+
+					// 3. 清空数据
+					this.perName = ''
+					this.age = ''
+					this.desc = ''
+
+				}
+			}
+		})
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script src="../js/vue.js"></script>
+</head>
+
+<body>
+  <div id="app">
+    <input type="text" v-model="msg" />
+    <p>{{msg}}</p>
+  </div>
+  <script type="text/javascript">
+    // 需求: 文本框中输入内容后,p标签中的内容会随时自动的变化
+    
+    const vm = new Vue({
+      el:'#app',
+      data:{
+        msg:'其实我也不太属性苍老师'
+      }
+    })
+  
+    /*
+      双向数据绑定
+      指令:   v-model="表达式"
+      一般用在表单标签中,相当于:value和input事件的配合
+    
+    
+    */
+  </script>
+</body>
+
+</html>

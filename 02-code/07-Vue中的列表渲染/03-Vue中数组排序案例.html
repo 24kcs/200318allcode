@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+	<div id="app">
+		<fieldset>
+			<legend>数据排序及相关操作</legend>
+			<input type="text" v-model="searchName" />
+			<ul>
+				<li v-for="(per,index) in personArr" :key="per.id">
+					索引:{{index}}----id:{{per.id}}---名字:{{per.name}}---年龄:{{per.age}}
+				</li>
+			</ul>
+			<button @click="state=1">升序排序</button>
+			<button @click="state=2">降序排序</button>
+			<button @click="state=0">原来顺序</button>
+		</fieldset>
+	</div>
+	<script type="text/javascript">
+		const vm = new Vue({
+			el: '#app',
+			data: {
+				searchName: '', // 用来获取文本框的数据
+				state: 0, // 标识,用来做不同方式的排序的标识,0---原来顺序,1---升序,2---降序
+				persons: [
+					{ id: 1, name: 'jack', age: 28 },
+					{ id: 2, name: 'tom', age: 49 },
+					{ id: 3, name: 'lucy', age: 15 },
+					{ id: 4, name: 'rousi', age: 69 },
+					{ id: 5, name: 'alibaba', age: 97 }
+				]
+			},
+			// 如果文本框的数据变化了,数组的数据也会跟着变化
+			computed: {
+				// 数组----的数据是动态的,根据文本框输入的内容计算的
+				personArr() {
+					const { searchName, persons, state } = this //es6语法
+					// 定义一个数组
+					// 通过persons数组中每一个person对象的name属性值和文本框中输入的数据进行筛选操作
+					const arr = persons.filter(item => item.name.indexOf(searchName) !== -1)
+					// 做判断 进行不同的排序操作
+					if (state !== 0) {
+						// 进行排序操作
+						arr.sort((p1, p2) => {
+							return state === 2 ? p2.age - p1.age : p1.age - p2.age
+						})
+					}
+					// 返回一个数组
+					return arr
+				}
+			}
+		})
+
+ 
+		// Vue中的指令中的v-bind指令  强制数据绑定    <标签  :fsdf="">
+
+
+
+
+	// 	const obj ={
+	// 		x:4,
+	// 		y:5,
+	// 		z:6
+	// 	}
+	// 	var obj1 = obj　　//这里我们可简写
+
+	//  const {x,y,z} = obj1
+	</script>
+</body>
+
+</html>

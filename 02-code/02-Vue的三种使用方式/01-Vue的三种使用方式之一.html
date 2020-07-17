@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <!--第一种:通过CDN在线引入:-->
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+</head>
+
+<body>
+  <!--html容器,Vue要操作的东西都是在这个容器中-->
+  <div id="app">
+    <!--这里的所有的内容都可以看成是模版内容-->
+    <!--{{msg}} 插值语法,此时的msg叫表达式-->
+    <p>{{msg}}</p>
+  </div>
+  <script type="text/javascript">
+    // 通过Vue搭建页面,操作页面中的一些效果
+    // 实例化Vue.并初始化
+    const vm = new Vue({
+      el:'#app' , // el--->element的简写, 'app'---->选择器,可以找得到html中的容器对象div
+      // 数据对象,内部都是定义的一些数据,这些数据一般都用在html容器的html模版中
+      data:{
+        // msg--->属性,后面的内容是属性的值
+        msg:'冰箱和冰激淋吵架了,冰激淋离家出走,后来越走越远,开始融化,后悔了,回来找冰箱,冰箱说:上来吧,自己冻'
+      }
+    })
+    /*
+     msg 在两个地方出现:解释完全不同
+     data对象中定义的msg,叫属性
+     html容器中使用的msg,叫表达式
+      注意:msg肯定是需要先在data中定义,然后才能在html容器中使用,为什么要两种叫法,为了后期分析Vue源码比较方便,所以,目前有两种叫法
+     插值语法的使用注意问题:一般情况,{{}} 插值语法,里面放的是表达式,一般用在成对的标签中间会更加的合适
+      定义vm 虽然没有使用,但是也有一定的意义,主要是理解MVVM模式  (vm ---->VM)
+    */
+
+
+    // function Person(name,age){
+    //   this.name= name
+    //   this.age=age
+    // }
+    // // 实例化的同时进行初始化操作
+    // var per = new Person('小明',20)
+
+
+    // const vm = new Vue({})  --- 就是一个对象
+  </script>
+</body>
+
+</html>

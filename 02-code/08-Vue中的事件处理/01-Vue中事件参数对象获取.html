@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+	<div id="app">
+		<h2>1.事件监听</h2>
+		<button @click="show1('哈哈')">按钮1</button>
+		<button @click="show2('嘎嘎',$event)">按钮2</button>
+		<button @click="show3($event,'嘿嘿')">按钮3</button>
+	</div>
+	<script type="text/javascript">
+
+		// 事件参数对象:就是事件监听的回调函数传入的参数，该参数是一个对象--->event
+		// 在Vue中,如何获取事件参数对象
+
+		const vm = new Vue({
+			el:'#app',
+			data:{
+
+			},
+			methods:{
+				show1(text){
+					console.log(text)
+				},
+				show2(text,event){
+					console.log(text,event)
+				},
+				show3(event,text){
+					console.log(event,text)
+				}
+			}
+		})
+
+
+	</script>
+</body>
+
+</html>

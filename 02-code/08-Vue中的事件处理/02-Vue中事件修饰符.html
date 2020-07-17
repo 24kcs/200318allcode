@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<style type="text/css">
+		.cls1 {
+			width: 200px;
+			height: 100px;
+			background-color: green
+		}
+
+		.cls2 {
+			width: 100px;
+			height: 50px;
+			background-color: pink;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<h2>事件修饰符</h2>
+
+
+
+		<!-- <a href="http://www.baidu.com" @click="goBaiDu1">百度</a>
+		<a href="http://www.baidu.com" @click.prevent="goBaiDu2">百度</a>
+		<div class="cls1" @click="showMsg1">
+			<p class="cls2" @click="showMsg2"></p>
+		</div>
+		<div class="cls1" @click="showMsg3">
+			<p class="cls2" @click.stop="showMsg4"></p>
+		</div> -->
+
+
+
+
+		<a href="http://www.baidu.com" @click="goBaiDu">百度</a>
+		<hr>
+		<a href="http://www.baidu.com" @click.prevent="goBaiDu2">百度</a>
+
+
+		<div class="cls1" @click="showMsg1">
+			<p class="cls2" @click="showMsg2">这里div中的p</p>
+		</div>
+
+		<hr>
+		<div class="cls1" @click="showMsg3">
+			<p class="cls2" @click.stop="showMsg4">这里div中的p</p>
+		</div>
+
+
+	</div>
+	<script type="text/javascript">
+		// 默认行为: 如:a 标签如果设置了href属性(值是正常的) 点击a 标签自动的跳转
+		// 阻止默认行为
+
+		const vm = new Vue({
+			el: '#app',
+			data: {},
+			// 书写方法的
+			methods: {
+				// e 事件参数对象
+				goBaiDu(e) {
+					// 执行了
+					e.preventDefault() // 阻止浏览器默认行为的---原生DOM的代码
+					console.log('a被点击了')
+				},
+				goBaiDu2() {
+					console.log('第二个a被点了')
+				},
+				showMsg1(){
+					console.log('外面的div被点了')
+				},
+				showMsg2(e){
+					console.log('里面的p被点了') // 阻止事件冒泡,----原生DOM的代码
+					e.stopPropagation()
+				},
+
+
+
+
+				showMsg3(){
+					console.log('外面的div被点了')
+				},
+				showMsg4(){
+					console.log('里面的p被点了') // 阻止事件冒泡,----原生DOM的代码
+				
+				},
+			}
+		})
+
+
+		/*
+		Vue中如果想要阻止浏览器的默认行为: 通过事件修饰符  .prevent 即可解决
+		Vue中如果想要阻止事件冒泡,通过事件修饰符 .stop 即可解决
+
+		复习:
+		a 标签还可以怎么设置,不让其跳转? 使用: ## 或者javascript:;
+
+		事件冒泡: 元素之间是嵌套关系,都注册或者绑定了相同的事件(不准确的,可能是类似的事件),内部元素的该事件触发了,外部该元素的事件自动的触发了
+
+		阻止事件冒泡
+		
+		
+		*/
+	</script>
+</body>
+
+</html>

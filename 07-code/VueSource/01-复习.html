@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+</head>
+
+<body>
+  <div id="demo">
+    <p>华哥喜欢健哥</p>
+    <p>健哥喜欢禹哥</p>
+    <p>禹哥喜欢华哥</p>
+  </div>
+  <script type="text/javascript">
+    // 复习
+    // 1. 伪数组转真数组的方式
+    const list1 = document.getElementsByTagName('p')
+    const list2 = [...list1]
+    const list3 = Array.from(list1) // 浅拷贝
+    const list4 = Array.prototype.slice.call(list1)
+    const list5 = [].slice.call(list1)
+    console.log(list1 instanceof Array)
+    console.log(list2 instanceof Array)
+    console.log(list3 instanceof Array)
+    console.log(list4 instanceof Array)
+    console.log(list5 instanceof Array)
+
+    // .call   bind  apply----极其重要----
+
+    console.log('=========================')
+
+    // 2. nodeType
+    // 节点: 页面中所有的东西都可以看成是节点,页面中:标签,属性,文本
+    // 标签: html标签,超文本标记语言,<名字> 都叫标签
+    // 元素: 标签就是元素
+    // 属性: 标签上 以键值对存在的这种的形式写法及用来存储数据,或者一些单独的属性
+    // 文本: 除了标签和属性都是文本
+    // 标签节点,属性节点,文本节点-----都属于节点,所以,节点有类型,通过nodeType属性来获取
+    function my$(id) {
+      return document.getElementById(id)
+    }
+    // 获取div标签节点
+    const eleNode = my$('demo')
+    // 获取div的属性节点
+    const attrNode = eleNode.getAttributeNode('id')
+    // 获取文本节点
+    const txtNode = eleNode.firstChild
+
+    console.log(eleNode.nodeType)
+    console.log(attrNode.nodeType)
+    console.log(txtNode.nodeType)
+
+
+    console.log('=========================')
+
+
+    // 3. Object.defineProperty()方法---为对象添加属性---Vue的源码中经常用到
+    const person = {
+      firstName: '东方', // 姓氏
+      lastName: '不败' // 名字
+    }
+    // 为对象添加一个属性
+    Object.defineProperty(person, 'fullName', {
+      configurable: false, // 默认值是false,是否可以删除该属性
+      enumerable: true, // 该属性是否可以被枚举遍历
+      // value:'', // 该属性的默认值
+      // writable:false, // 当前的这个属性的值是否可以被修改
+      // 获取当前的这个属性的值,getter---读---获取, const result = person.fullName
+      get() {
+        return this.firstName + '_' + this.lastName
+      },
+      // 设置当前这个属性的值, setter---写---设置, person.fullName= '西门_吹风'
+      set(val) {
+        const name = val.split('_')
+        this.firstName = name[0]
+        this.lastName = name[1]
+      }
+    })
+    // 设置姓名
+    person.fullName = person.firstName + '_' + person.lastName
+    console.log(person.fullName)
+    person.firstName = '诸葛'
+    person.lastName = ' 孔明'
+    // person对象中 三个属性之间最好是有真正的关联关系(某个属性发生了变化,相关联的属性值能够自动的变化)
+    console.log(person.fullName)
+    person.fullName = '西门_吹雪'
+    console.log(person.firstName, person.lastName)
+
+
+    // 4. Object.keys()方法,获取某个对象中所有的键(属性名字)
+    const keys = Object.keys(person)
+    // console.log(keys)
+    for (var key in person) {
+      console.log(key + '==========' + person[key])
+    }
+    // 6.文档碎片对象模型---DcoumentFragment----(高效批量处理多个节点)
+    // 1)创建文档碎片对象
+    const fragment = document.createDocumentFragment()
+    // 2)获取html容器对象---->目的是为了获取内部的所有的要操作的节点
+    const divObj = document.getElementById('demo')
+    // 3)把html容器中所有的节点全部的扔进(剪切)文档碎片对象中
+    var child
+    while (child = divObj.firstChild) {
+      fragment.appendChild(child)
+    }
+    // 4)通过文档碎片对象对内部的所有的节点进行相关的操作
+    fragment.childNodes.forEach(node => {
+      node.innerHTML = '真开心'
+    })
+
+    // 5)把文档碎片对象整体的节点内容全部的放到html容器中
+    divObj.appendChild(fragment)
+
+
+    
+
+
+
+  </script>
+</body>
+
+</html>

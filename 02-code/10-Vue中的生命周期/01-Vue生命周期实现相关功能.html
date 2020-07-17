@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>每天都被自己帅醒!</title>
+	<link rel="stylesheet" href="">
+	<script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+	<div id="app">
+
+		<button @click="clear">干掉vm和定时器</button>
+		<p v-show="isShow">哈哈,我又变帅了</p>
+
+	</div>
+	<script type="text/javascript">
+	 // 生命周期:从生到死的过程   实例对象从创建到销毁的过程
+		const vm = new Vue({
+			el: '#app',
+			data: {
+				isShow: false
+			},
+			// 页面加载完成后,设置一个定时器,修改isShow属性的值
+			// 回调函数----钩子函数---自己调用的
+			// 页面加载完毕的生命周期回调函数
+			mounted () {
+				this.timeId = setInterval(() => {
+					// 设置isShow
+					this.isShow = !this.isShow
+					console.log('定时器在运行中...')
+				}, 1000)
+			},
+			// vm实例对象将要被销毁之前的生命周期回调
+			beforeDestroy () {
+				// 清理定时器
+				clearInterval(this.timeId)
+			},
+			destroyed () {
+				console.log('======vm没了')
+			},
+			methods: {
+				// 清理定时器
+				clear(){
+					// clearInterval(this.timeId)
+					// 销毁vm实例对象
+					this.$destroy()  // 自杀的操作
+					console.log('vm实例对象要被干掉了')
+				}
+			}
+		})
+
+	</script>
+</body>
+
+</html>

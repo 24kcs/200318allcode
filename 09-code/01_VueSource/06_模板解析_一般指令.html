@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>06_模板解析_一般指令</title>
+  <script src="./js/mvvm.js"></script>
+  <script src="./js/compile.js"></script>
+  <script src="./js/observer.js"></script>
+  <script src="./js/watcher.js"></script>
+  <style type="text/css">
+    .cls {
+      color: red;
+    }
+
+    .cls2 {
+      font-size: 50px;
+    }
+
+    .cls3 {
+      background-color: blue;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <p v-text="msg"></p>
+  </div>
+  <script type="text/javascript">
+
+    const vm = new MVVM({
+      el: '#app',
+      data: {
+        msg: '源码真香'
+      }
+    })
+    /*
+     模版解析之普通指令
+
+     插值解析和普通指令的解析 最终调用的方法是同一个,updater对象中textUpdater()方法
+
+
+     面试题: 谈谈你对普通指令解析的理解
+       Vue中在模版解析的时候会进行普通指令的解析操作
+
+    在实例化MVVM的时候,首先内部会进行数据代理操作,然后进行数据劫持操作,最后开始进行模版的解析操作,此时会实例化Compile对象,在其构造函数内部,先创建文档碎片对象,获取div容器对象,把该容器对象中所有的节点全部的扔进文档碎片对象中,此时在内存中开始进行模版解析操作,都是在init方法内部实现(compileElement方法中),遍历文档碎片对象中所有的子节点,判断每个节点是标签节点还是文本节点,如果是标签节点,先获取该标签上所有的属性,判断该属性是不是vue的指令(主要看该属性是不是以v-开头),如果是vue的指令,还要判断该指令是不是普通指令,如果是普通指令会通过compileUtil对象中的相关方法调用bind方法,内部调用updater对象中的相关的方法,进行表达式msg的内容替换操作,然后 还需要把标签上所有的属性全部的进行删除
+    此时,都是在内存中完成,最终需要把解析后的文档碎片对象加入到div容器中
+    
+
+    
+    简版:
+    普通指令解析,就是在内存中的文档碎片对象中获取标签的所有的属性,判断属性是不是指令，是不是普通指令,如果是则获取该普通指令中的表达式,通过vm来获取表达式的值,最终调用updater对象中的相关方法进行替换操作
+
+     普通指令解析:
+       1. 实例化MVVM内部
+       2. 实例化Compile编译对象内部
+       3. 创建文档碎片对象---内存
+       4. 遍历div容器中所有的子节点放在文档碎片对象中 
+       5. 获取标签节点及与该节点的所有的属性
+       6. 判断该属性是不是指令及是不是普通指令
+       7. 通过updater对象中相关的方法进行替换操作(结束后会删除标签的所有属性)
+       7. 内存中标签普通指令解析后需要把文档碎片对象重新加到div中
+
+    
+    
+    */
+  </script>
+</body>
+
+</html>

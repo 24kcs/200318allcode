@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+  <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+
+  <script type="text/javascript">
+    // 需求:在某个对象中,某个属性的值改变,相关联的属性的值会自动发生改变----vue中的计算属性
+
+    const person = {
+      firstName: '东方',  // 姓氏
+      lastName: '不败' // 名字
+    }
+
+    // 为某个对象添加相关联的属性(为某个对象添加属性,并且该属性和该对象中其他的属性进行关联)
+    /*
+     参数1: 某个对象,为某个对象添加属性,这里的某个对象就是第一个参数
+     参数2: 要添加的属性的名字----字符串类型
+     参数3: 配置对象,可以设置该属性的相关的配置操作
+    
+    */
+    Object.defineProperty(person, 'fullName', {
+      configurable: false, // 默认是false,表示该属性是否可以被删除操作(该属性的修改操作)
+      enumerable: false, // 默认是false,表示的是该属性是否可以被枚举遍历
+      // value:'哈_哈', // 该属性的默认值
+      // writable:true, // 默认是false,表示的是该属性值是否可以被修改
+      get() {
+        // 把获取到的值给fullName属性,把值存入到fullName这个属性中
+        // 什么时候会进入到get方法内部,当在外部通过person.fullName的时候就会进来,例子:cosole.log(person.fullName)
+        return this.firstName + '_' + this.lastName
+      },
+      set(val) {
+        // 把fullName属性的值获取到之后,取出来,分别给其他的属性
+        // 什么时候会进入到set方法内部,当外部通过person.fullName赋值的时候会进来,例子:person.fullName='小明'
+        const name = val.split('_')
+        this.firstName = name[0]
+        this.lastName = name[1]
+      }
+    })
+
+    // 设置姓名
+    person.fullName = person.firstName + '_' + person.lastName
+    console.log(person.fullName)
+    // 修改姓氏
+    person.firstName = '西门'
+    // 修改名字
+    person.lastName = '强哥'
+    // 查看姓名
+    console.log(person.fullName)
+    // 修改姓名
+    person.fullName = '诸葛_孔明'
+    // 查看姓氏和名字
+    console.log(person.firstName, person.lastName)
+
+
+  </script>
+</body>
+
+</html>

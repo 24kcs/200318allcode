@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>玉树临风美少年，揽镜自顾夜不眠 </title>
+</head>
+<body>
+  <!--引入事件总线的js文件,进行测试-->
+  <script src="./EventBus.js"></script>
+  <script type="text/javascript">
+
+  // 自定义事件总线-----自己实现---事件总线的原理的思路及代码的实现
+
+  // 绑定
+    EventBus.on('add',(data)=>{
+      console.log('add事件触发了1',data)
+    })
+    EventBus.on('add',(data)=>{
+      console.log('add事件触发了2',data)
+    })
+    EventBus.on('add',(data)=>{
+      console.log('add事件触发了3',data)
+    })
+
+    EventBus.on('del',(data)=>{
+      console.log('del事件触发了',data)
+    })
+
+    // 解绑
+    EventBus.off('add')
+    // 分发
+
+    EventBus.emit('add',123)
+    EventBus.emit('del',100)
+  </script>
+</body>
+</html>
