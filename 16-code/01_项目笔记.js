@@ -395,6 +395,27 @@ pageSize: 10 // 每一页中显示几条数据
     this.$emit('changeCurrentPage',page)
 
 
+24. 问题:添加购物车的操作:
+    成功的情况: 路由跳转并传递路由参数
+    失败的情况: 提示错误信息
+  解决:
+    1. 回调函数
+    组件中在dispatch的时候,可以指定一个回调函数,在异步的action中,子请求成功或者失败的时候调用该回调函数,并且传入对应的成功或者失败的提示信息,如果成功则是空字符串提示信息,如果是失败,则传入非空字符串提示信息,最终在回调函数执行的时候对传入进来的提示信息做判断,再继续后面的操作
+    2. async-await来解决
+    前提:async函数执行的返回值是一个promise对象
+    promise成功的value:函数体执行没有错误,那么return的就是value(不能是失败的promise)
+    promise失败的reason:函数体执行错误/抛出了error/返回一个失败promise
+    store.dispatch('addToCart2',query)返回值是action函数的返回值
+    1)在组件中正常的分发action
+     this.$store.dispatch('addToCart2',query)返回值是action函数的返回值
+    2)在异步action中,在请求成功或者失败后,会犯相关的errorMsg(可能有值也可能没有值)
+     return result.code===200?'':result.message||'添加失败'
+    3)在组件中,通过await来得到errorMsg,根据结果来做响应的处理
+
+      
+      
+
+
 
 
 */

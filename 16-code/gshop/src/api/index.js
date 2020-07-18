@@ -19,3 +19,6 @@ export const reqProductList = (searchParams) => ajax.post('/list', searchParams)
 
 // 获取商品详情信息
 export const reqDetailInfo = (skuId) => ajax.get(`/item/${skuId}`)
+
+// 添加购物车的接口
+export const reqAddToCart = (skuId, skuNum) => ajax.post(`/cart/addToCart/${skuId}/${skuNum}`)

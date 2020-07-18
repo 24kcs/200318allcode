@@ -4,10 +4,13 @@ import home from './home'
 import search from './search'
 // 引入detail
 import detail from './detail'
+// 引入shopcart
+import shopcart from './shopcart'
 // 暴露模块对象
 export default {
   // 这里可以放多个模块
   home,
   search,
-  detail
+  detail,
+  shopcart
 }

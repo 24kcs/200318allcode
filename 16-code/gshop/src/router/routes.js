@@ -8,6 +8,8 @@ import Login from '@/pages/Login'
 import Search from '@/pages/Search'
 // 引入Detail组件
 import Detail from '@/pages/Detail'
+// 引入AddCartSuccess组件
+import AddCartSuccess from '@/pages/AddCartSuccess'
 // 注册路由,并暴露出去
 export default [
   // 注册路由
@@ -46,6 +48,11 @@ export default [
     path:'/detail/:skuId',
     component:Detail,
     name:'detail'
+  },
+  // AddCartSuccess路由组件----添加购物车成功组件
+  {
+    path:'/addcartsuccess',
+    component:AddCartSuccess
   },
   // 路由的重定向设置
   {

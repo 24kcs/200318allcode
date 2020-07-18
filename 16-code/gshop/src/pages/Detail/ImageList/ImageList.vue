@@ -38,7 +38,7 @@ export default {
             slidesPerView: 5, // 一次显示5项图片(swiper-slide ---相当于是显示了5屏)
             slidesPerGroup: 5, // 以5项进行一次的切换
             // 直接使用dom对象
-            loop: true, // 循环模式选项
+          
             // 如果需要分页器
             pagination: {
               el: '.swiper-pagination'
@@ -58,7 +58,10 @@ export default {
   methods: {
     // 点击图片,设置当前点击的图片的选中索引,有高亮显示的效果
     changeCurrentIndex(index) {
+      // 设置当前某个图片高亮显示选中的索引值
       this.currentIndex = index
+      // 通知外部的父级组件,传入一个索引值
+      this.$emit('changeCurrentImgIndex',index)
     }
   }
 }

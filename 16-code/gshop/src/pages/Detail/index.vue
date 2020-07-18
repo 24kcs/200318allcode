@@ -10,16 +10,19 @@
         <span>{{categoryView.category1Name}}</span>
         <span>{{categoryView.category2Name}}</span>
         <span>{{categoryView.category3Name}}</span>
-      
       </div>
       <!-- 主要内容区域 -->
       <div class="mainCon">
         <!-- 左侧放大镜区域 -->
         <div class="previewWrap">
           <!--放大镜效果-->
-          <Zoom />
+          <Zoom
+            v-if="skuImageList.length>0"
+            :imgUrl="skuImageList[currentImgIndex].imgUrl"
+            :bigImgUrl="skuImageList[currentImgIndex].imgUrl"
+          />
           <!-- 小图列表 -->
-          <ImageList />
+          <ImageList @changeCurrentImgIndex="changeCurrentImgIndex" />
         </div>
         <!-- 右侧选择区域布局 -->
         <div class="InfoWrap">
@@ -68,7 +71,13 @@
               <div class="choosed"></div>
               <dl v-for="(spuAttr,index) in spuSaleAttrList" :key="spuAttr.id">
                 <dt class="title">{{spuAttr.saleAttrName}}</dt>
-                <dd changepirce="0" :class="{active:attrVal.isChecked==='1'}" v-for="(attrVal,index) in spuAttr.spuSaleAttrValueList" :key="attrVal.id" @click="setVale(attrVal,spuAttr.spuSaleAttrValueList)">{{attrVal.saleAttrValueName}}</dd>
+                <dd
+                  changepirce="0"
+                  :class="{active:attrVal.isChecked==='1'}"
+                  v-for="(attrVal,index) in spuAttr.spuSaleAttrValueList"
+                  :key="attrVal.id"
+                  @click="setVale(attrVal,spuAttr.spuSaleAttrValueList)"
+                >{{attrVal.saleAttrValueName}}</dd>
               </dl>
             </div>
             <div class="cartWrap">
@@ -78,7 +87,7 @@
                 <a href="javascript:" class="mins" @click="skuNum>1?skuNum--:''">-</a>
               </div>
               <div class="add">
-                <a href="javascript:">加入购物车</a>
+                <a href="javascript:" @click="addToCart">加入购物车</a>
               </div>
             </div>
           </div>
@@ -322,7 +331,7 @@ import ImageList from './ImageList/ImageList'
 // 引入放大镜组件
 import Zoom from './Zoom/Zoom'
 // 引入vuex的辅助函数
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Detail',
   // 注册组件
@@ -330,14 +339,20 @@ export default {
     ImageList,
     Zoom
   },
-  data () {
+  data() {
     return {
-      skuNum:1 // 商品的数量  
+      skuNum: 1, // 商品的数量
+      currentImgIndex: 0 // 用来存储某个图片的索引的
     }
   },
   // 计算属性
   computed: {
-    ...mapGetters(['categoryView','skuInfo','spuSaleAttrList'])
+    ...mapGetters([
+      'categoryView',
+      'skuInfo',
+      'spuSaleAttrList',
+      'skuImageList'
+    ])
   },
   // 界面加载后的生命周期回调
   mounted() {
@@ -347,16 +362,40 @@ export default {
   },
   methods: {
     // 点击某个销售属性的值,设置当前点击的属性值被选中(有高亮显示,设置了样式)
-    setVale(attrVal,valueList){
+    setVale(attrVal, valueList) {
       // 把当前的valueList数组中每个销售属性的isChecked设置为'0',去掉了所有的样式
       // attrVal对象中的isChecked属性值:'1'或者'0'
       // 判断目的是为了设置,无论isChecked是'1'还是'0' 都设置为'0'
-      if(attrVal.isChecked!==-1){
-        valueList.forEach(v=>( v.isChecked = '0'))
+      if (attrVal.isChecked !== -1) {
+        valueList.forEach(v => (v.isChecked = '0'))
         // 设置当前的销售属性值的isChecked
         attrVal.isChecked = '1'
       }
-
+    },
+    // 自定义事件,获取图片轮播图组件组件中选中的图片的索引
+    changeCurrentImgIndex(index) {
+      // 保存改变后的索引值
+      this.currentImgIndex = index
+    },
+    // 添加购物车的回调函数
+    async addToCart() {
+      // 定义query对象
+      const query = { skuId: this.skuInfo.id, skuNum: this.skuNum }
+      // 做添加购物车的操作---使用回调函数来解决问题
+      // this.$store.dispatch('addToCart1', { ...query, callback: this.callback })
+      // 做添加购物车的操作---使用async和await的方式来解决
+      const errorMsg = await this.$store.dispatch('addToCart2', query)
+      this.callback(errorMsg)
+      // 路由跳转
+      // this.$router.push({ path: '/addcartsuccess', query })
+    },
+    callback(errorMsg) {
+      if (!errorMsg) {
+        const query = { skuId: this.skuInfo.id, skuNum: this.skuNum }
+        this.$router.push({ path: '/addcartsuccess', query })
+      } else {
+        alert(errorMsg)
+      }
     }
   }
 }
