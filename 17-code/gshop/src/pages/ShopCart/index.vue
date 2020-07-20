@@ -13,7 +13,17 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="(item,index) in shopCartList" :key="item.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" v-model="item.isChecked" />
+            <!--v-model这种方式是直接获取该购物项的isChecked的值(1/0),如果点击了复选框,直接设置了购物项的isChecked等于1/0,并不能直接分发action,调用api接口的方式来真正的修改购物项的选中状态-->
+            <!-- <input type="checkbox" name="chk_list" v-model="item.isChecked" /> -->
+            <!--通过计算属性想要修改或者获取购物项的选中状态也有问题,就是获取不到索引值-->
+            <!-- <input type="checkbox" name="chk_list" :checked="isChecked"  /> -->
+            <!--购物项的选中状态实际上就是在设置html标签的checked属性值,所以,把这个属性值用动态的购物项的isChecked来绑定,终究是要点击复选框来改变选中状态-->
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="item.isChecked"
+              @change="checkCartItem(item)"
+            />
           </li>
           <li class="cart-list-con2">
             <img :src="item.imgUrl" />
@@ -28,14 +38,15 @@
           <li class="cart-list-con5">
             <a href="javascript:void(0)" class="mins">-</a>
             <!-- <input autocomplete="off" type="text" value="1" minnum="1" class="itxt" v-model="item.skuNum" /> -->
-             <input autocomplete="off" type="text" minnum="1" class="itxt" v-model="item.skuNum" />
+            <input autocomplete="off" type="text" minnum="1" class="itxt" v-model="item.skuNum" />
             <a href="javascript:void(0)" class="plus">+</a>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{item.skuPrice*item.skuNum}}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="javascript:;" class="sindelet">删除</a>
+            <!--删除的是某个购物项-->
+            <a href="javascript:;" class="sindelet" @click="deleteCartItem(item.skuId)">删除</a>
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -44,22 +55,22 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" />
+        <input class="chooseAll" type="checkbox" v-model="isAllCheck" />
         <span>全选</span>
       </div>
       <div class="option">
-        <a href="#none">删除选中的商品</a>
+        <a href="javascript:;" @click="deleteCartItems">删除选中的商品</a>
         <a href="#none">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
         <div class="chosed">
           已选择
-          <span>0</span>件商品
+          <span>{{totalCount}}</span>件商品
         </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{totalPrice}}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
@@ -71,14 +82,33 @@
 
 <script>
 // 引入vuex的辅助函数
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'ShopCart',
   computed: {
     // 通过辅助函数获取state对象中的购物车商品信息数据数组
     ...mapState({
       shopCartList: state => state.shopcart.shopCartList
-    })
+    }),
+    // 通过vuex的辅助函数获取计算属性中的 总数量,总价格,是否全选
+    ...mapGetters([
+      'totalCount',
+      'totalPrice',
+      'isAllCheck',
+      'selectedCartItems'
+    ])
+    // isChecked:{
+    //   // 获取购物项的选中状态
+    //   get(){
+    //     // index---->索引,先遍历,才能获取索引值
+    //     return this.shopCartList[index].isChecked
+    //   },
+    //   // 设置购物项的选中状态
+    //   set(val){
+    //     // val----->勾选或者没有勾选----true/false
+    //     this.shopCartList[index].isChecked=val
+    //   }
+    // }
   },
   // 页面加载后的生命周期回调
   mounted() {
@@ -89,6 +119,73 @@ export default {
     // 获取购物车商品信息数据
     getShopCartList() {
       this.$store.dispatch('getShopCartList')
+    },
+    // 删除某个购物项的点击事件的回调函数
+    async deleteCartItem(skuId) {
+      if (window.confirm('确定删除吗')) {
+        // 对话框很丑但是很温柔,以后用UI组件库
+        // 分发action的同时,获取操作后的提示信息
+        // const errorMsg = await this.$store.dispatch('deleteCartItem1', skuId)
+        // if (!errorMsg) {
+        //   // 成功了---则重新获取的新的数据
+        //   this.getShopCartList()
+        // } else {
+        //   // 失败了
+        //   alert(errorMsg)
+        // }
+        // 通过try-catch的方式
+        try {
+          await this.$store.dispatch('deleteCartItem2', skuId)
+          // 成功了---则重新获取的新的数据
+          this.getShopCartList()
+        } catch (error) {
+          alert(error.message || '删除失败了')
+        }
+      }
+    },
+    // 删除所有选中的购物项的点击事件的回调函数
+    deleteCartItems() {
+      // 获取所有选中的商品购物项
+      const { selectedCartItems } = this
+      // 如果没有选中的商品(选中购物项的数组是空的)
+      if (selectedCartItems.length === 0) return
+      // 提示信息
+      if (window.confirm('确定删除所有选中的商品吗')) {
+        const promises = [] // 存储每个promise对象,最后进行统一的处理
+        selectedCartItems.forEach(item => {
+          // 分发那个删除某个购物项的action
+          const promise = this.$store.dispatch('deleteCartItem2', item.skuId)
+          promises.push(promise)
+        })
+        // 最后进行统一的处理
+        Promise.all(promises).then(
+          values => {
+            // 重新获取购物车的商品信息数据
+            this.getShopCartList()
+          },
+          error => {
+            alert(error.message || '删除失败了')
+          }
+        )
+      }
+    },
+    // 点击复选框修改当前购物项的选中状态
+    checkCartItem(item) {
+      // 获取当前这个复选框绑定的购物项的选中状态并取反
+      const isChecked = item.isChecked === 1 ? 0 : 1
+      // 获取当前这个购物项的skuId值
+      const { skuId } = item
+      // 分发action
+      this.$store.dispatch('checkCartItem',{skuId,isChecked}).then(
+        () => {
+          // 状态修改成功了
+          this.getShopCartList()
+        },
+        error => {
+          // 状态修改失败了
+          alert(error.message || '修改状态失败')
+        }
+      )
     }
   }
 }
