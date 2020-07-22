@@ -122,6 +122,26 @@ export default {
         }
       }
     }
+  },
+  // 组件内路由守卫
+  // 2.只能在没有登录的情况下,才可以查看登录界面
+  beforeRouteEnter(to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+
+    // console.log(this) // undefined
+
+    next(vm => {
+      // 通过 `vm` 访问组件实例
+      if (vm.$store.state.user.userInfo.name) {
+        // 登录---->已经登录了--->直接去/首页
+        next('/')
+      } else {
+        // 没有登录
+        next()
+      }
+    })
   }
 }
 </script>

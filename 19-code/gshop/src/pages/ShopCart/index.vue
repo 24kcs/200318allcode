@@ -89,7 +89,7 @@
         </div>
         <div class="sumbtn">
           <!--需要登录的,如果没有登录则跳转到登录界面-->
-          <a class="sum-btn" href="javascript:;">结算</a>
+          <a class="sum-btn" href="javascript:;" @click="toTrade">结算</a>
         </div>
       </div>
     </div>
@@ -305,6 +305,11 @@ export default {
           skuNum: changeNum
         })
       }
+    },
+
+    // 点击结算的按钮,的回调函数---->跳转到结算的组件界面
+    toTrade(){
+      this.$router.push('/trade')
     }
   }
 }

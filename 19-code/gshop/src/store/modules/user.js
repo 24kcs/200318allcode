@@ -4,7 +4,7 @@ import { getUUID } from '@/utils/storageUtils'
 import { reqLogin, reqRegister, reqLoginOut } from '@/api'
 const state = {
   // 用户信息对象
-  userInfo: {},
+  userInfo: JSON.parse(localStorage.getItem('USER_INFO'))||{},
   // 临时用户id凭证
   userTempId: getUUID()
 }
@@ -26,6 +26,8 @@ const actions = {
     if (result.code === 200) {
       // 获取用户信息
       const userInfo = result.data
+      // 存储用户信息到浏览器的缓存中
+      localStorage.setItem('USER_INFO',JSON.stringify(userInfo))
       // 提交mutation
       commit('RECEIVE_USER_INFO', userInfo)
     } else {
@@ -46,6 +48,8 @@ const actions = {
   async loginOut ({ commit }) {
     const result = await reqLoginOut()
     if (result.code === 200) {
+      // 清理缓存中的用户信息
+      localStorage.removeItem('USER_INFO')
       // 退出成功
       commit('RESET_USER_INFO')
     } else {

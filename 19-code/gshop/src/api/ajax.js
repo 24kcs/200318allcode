@@ -17,6 +17,13 @@ ajax.interceptors.request.use(config => {
   NProgress.start()
   // 请求头中存储用户的临时id数据
   config.headers['userTempId'] = store.state.user.userTempId
+  // 获取token信息
+  const token = store.state.user.userInfo.token
+  // 判断token是否存在
+  if(token){
+    // 在请求头中携带token
+    config.headers['token']=token
+  }
   // 直接返回请求配置对象
   return config
 })

@@ -19,7 +19,8 @@
           </p>
         </div>
         <div class="typeList">
-          <a href="###">我的订单</a>
+          <!-- <a href="###">我的订单</a> -->
+          <router-link to="/center">我的订单</router-link>
           <!-- <a href="javascript:;">我的购物车</a> -->
           <router-link to="/shopcart">我的购物车</router-link>
           <a href="###">我的尚品汇</a>
@@ -52,7 +53,7 @@
 </template>
 <script>
 // 引入vuex的辅助函数
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 export default {
   name: 'Header',
   data() {
@@ -62,7 +63,7 @@ export default {
   },
   computed: {
     ...mapState({
-      userInfo:state=>state.user.userInfo
+      userInfo: state => state.user.userInfo
     })
   },
   methods: {
@@ -127,7 +128,7 @@ export default {
       }
     },
     // 退出的回调函数
-    async loginOut(){
+    async loginOut() {
       // 分发action
       try {
         await this.$store.dispatch('loginOut')
