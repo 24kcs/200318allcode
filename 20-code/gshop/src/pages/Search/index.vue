@@ -73,7 +73,8 @@
                       <img :src="goods.defaultImg" />
                     </a>-->
                     <router-link :to="{name:'detail',params:{skuId:goods.id}}">
-                      <img :src="goods.defaultImg" />
+                      <!-- <img :src="goods.defaultImg" /> -->
+                       <img v-lazy="goods.defaultImg" />
                     </router-link>
                   </div>
                   <div class="price">
@@ -134,7 +135,7 @@ export default {
         // trademark: '', // 品牌信息  '254:小米'------>  '品牌的id值:品牌的名字'
         order: '1:desc', // 排序方式   '1:desc' ----->   1--->综合排序  2--->价格排序, desc--->降序,asc--->升序
         pageNo: 1, // 当前的页码--->默认显示第1页的数据
-        pageSize: 5, // 每页显示数据的条数
+        pageSize: 10, // 每页显示数据的条数
         keyword: '', // 搜索关键字
         props: [] // 平台属性 ['384:NM存储卡:存储卡'] '平台属性的id值:平台属性值:平台属性名字'
         // ["384:支持MicroSD(TF):存储卡", "385:128GB :机身存储", "386:3GB:运行内存"]

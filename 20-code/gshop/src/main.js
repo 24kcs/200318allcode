@@ -20,6 +20,20 @@ import Pagination from '@/components/Pagination'
 import './utils/validate'
 // 引入所有的api接口函数
 import * as API from '@/api'
+// 执行element-ui的代码
+import './utils/elements'
+
+// 引入图片
+import loading from '@/assets/images/loading.gif'
+// 引入图片懒加载的插件
+import VueLazyload from 'vue-lazyload'
+
+// 声明使用插件,并进行配置
+Vue.use(VueLazyload, {
+  loading
+})
+
+
 // 把API挂载到Vue的prototype上
 Vue.prototype.$API = API
 // 定义全局公共组件(参数1:组件名字,参数2:组件对象)

@@ -3,47 +3,50 @@
     <div class="container">
       <div @mouseenter="firstShow" @mouseleave="firstHide">
         <h2 class="all">全部商品分类</h2>
-        <div class="sort" @click="toSearch" v-if="isShowFirst">
-          <div class="all-sort-list2">
-            <div
-              class="item"
-              v-for="(c1,index) in baseCategoryList"
-              :key="c1.categoryId"
-              :class="{item_on:currentIndex===index}"
-              @mouseenter="showSubCategory(index)"
-            >
-              <h3>
-                <a
-                  href="javascript:;"
-                  :data-categoryName="c1.categoryName"
-                  :data-category1Id="c1.categoryId"
-                >{{c1.categoryName}}</a>
-              </h3>
-              <div class="item-list clearfix">
-                <div class="subitem">
-                  <dl class="fore" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
-                    <dt>
-                      <a
-                        href="javascript:;"
-                        :data-categoryName="c2.categoryName"
-                        :data-category2Id="c2.categoryId"
-                      >{{c2.categoryName}}</a>
-                    </dt>
-                    <dd>
-                      <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
+        <!--实现过渡效果-->
+        <transition name="move">
+          <div class="sort" @click="toSearch" v-if="isShowFirst">
+            <div class="all-sort-list2">
+              <div
+                class="item"
+                v-for="(c1,index) in baseCategoryList"
+                :key="c1.categoryId"
+                :class="{item_on:currentIndex===index}"
+                @mouseenter="showSubCategory(index)"
+              >
+                <h3>
+                  <a
+                    href="javascript:;"
+                    :data-categoryName="c1.categoryName"
+                    :data-category1Id="c1.categoryId"
+                  >{{c1.categoryName}}</a>
+                </h3>
+                <div class="item-list clearfix">
+                  <div class="subitem">
+                    <dl class="fore" v-for="(c2,index) in c1.categoryChild" :key="c2.categoryId">
+                      <dt>
                         <a
                           href="javascript:;"
-                          :data-categoryName="c3.categoryName"
-                          :data-category3Id="c3.categoryId"
-                        >{{c3.categoryName}}</a>
-                      </em>
-                    </dd>
-                  </dl>
+                          :data-categoryName="c2.categoryName"
+                          :data-category2Id="c2.categoryId"
+                        >{{c2.categoryName}}</a>
+                      </dt>
+                      <dd>
+                        <em v-for="(c3,index) in c2.categoryChild" :key="c3.categoryId">
+                          <a
+                            href="javascript:;"
+                            :data-categoryName="c3.categoryName"
+                            :data-category3Id="c3.categoryId"
+                          >{{c3.categoryName}}</a>
+                        </em>
+                      </dd>
+                    </dl>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </transition>
       </div>
 
       <nav class="nav">
@@ -69,14 +72,14 @@ export default {
   data() {
     return {
       currentIndex: -2, // 用来存储鼠标进入的时候的索引值
-      isShowFirst: true // 默认当前的分类列表是显示的
+      isShowFirst: true, // 默认当前的分类列表是显示的
     }
   },
   computed: {
     // 通过vuex的辅助函数,获取homt模块中的状态数据:三级分类信息数据--数组
     ...mapState({
-      baseCategoryList: state => state.home.baseCategoryList
-    })
+      baseCategoryList: (state) => state.home.baseCategoryList,
+    }),
   },
   // 界面加载后的生命周期回调
   mounted() {
@@ -90,7 +93,7 @@ export default {
   },
   methods: {
     // 鼠标进入的事件:通过节流来实现
-    showSubCategory: throttle(function(index) {
+    showSubCategory: throttle(function (index) {
       // 初始值是-2,目的是没有选中,如果不是-2,鼠标进来后,直接改变当前选中的索引
       if (this.currentIndex !== -2) {
         this.currentIndex = index
@@ -107,7 +110,7 @@ export default {
           categoryname,
           category1id,
           category2id,
-          category3id
+          category3id,
         } = target.dataset
         // 定义query对象用来存储路由需要传递的参数数据
         const query = { categoryName: categoryname }
@@ -148,8 +151,8 @@ export default {
     firstShow() {
       this.isShowFirst = true
       this.currentIndex = -1
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="less" rel="stylesheet/less" scoped>
@@ -188,6 +191,15 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
+      &.move-enter-active,
+      &.move-leave-active {
+        transition: all .5s;
+      }
+      &.move-enter,
+      &.move-leave-to {
+        opacity: 0;
+        height: 0;
+      }
       .all-sort-list2 {
         .item {
           h3 {

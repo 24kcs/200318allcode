@@ -23,9 +23,12 @@ import Center from '@/pages/Center'
 // 引入MyOrder组件
 import MyOrder from '@/pages/Center/MyOrder'
 // 引入GroupBuy组件
-import GroupBuy from '@/pages/Center/GroupBuy'
+// import GroupBuy from '@/pages/Center/GroupBuy'
+
+// 优化:------>路由的懒加载()
+const GroupBuy = () => import('@/pages/Center/GroupBuy')
 // 引入store
-import store from '@/store'
+// import store from '@/store'
 // 注册路由,并暴露出去
 export default [
   // 注册路由
@@ -47,6 +50,8 @@ export default [
   {
     path: '/pay',
     component: Pay,
+    // 路由传参是可以使用props的方式
+    props: route => ({ orderId: route.query.orderId }),
     // 5.只能从trade(结算)界面才能够进入到pay(支付)界面
     beforeEnter: (to, from, next) => {
       // 跳转过来的地址是从结算地址来的

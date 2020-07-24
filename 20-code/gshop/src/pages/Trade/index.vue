@@ -3,9 +3,14 @@
     <h3 class="title">填写并核对订单信息</h3>
     <div class="content">
       <h5 class="receive">收件人信息</h5>
-      <div class="address clearFix" v-for="(addr,index) in tradeInfo.userAddressList" :key="addr.id">
-        <span class="username selected">{{addr.consignee}}</span>
-        <p>
+      <div
+        class="address clearFix"
+        v-for="(addr,index) in tradeInfo.userAddressList"
+        :key="addr.id"
+      >
+        <!--显示的是收件人的名字-->
+        <span class="username" :class="{selected:selectedAddr===addr}">{{addr.consignee}}</span>
+        <p @click="selectedAddr=addr">
           <span class="s1">{{addr.userAddress}}</span>
           <span class="s2">{{addr.phoneNum}}</span>
           <span class="s3" v-if="addr.isDefault==='1'">默认地址</span>
@@ -28,7 +33,11 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix" v-for="(item,index) in tradeInfo.detailArrayList" :key="item.skuId">
+        <ul
+          class="list clearFix"
+          v-for="(item,index) in tradeInfo.detailArrayList"
+          :key="item.skuId"
+        >
           <li>
             <img :src="item.imgUrl" alt />
           </li>
@@ -44,11 +53,9 @@
         </ul>
       </div>
 
-
-
       <div class="bbs">
         <h5>买家留言：</h5>
-        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont"></textarea>
+        <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont" v-model="orderComment"></textarea>
       </div>
       <div class="line"></div>
       <div class="bill">
@@ -78,19 +85,19 @@
     <div class="trade">
       <div class="price">
         应付金额:
-        <span>¥5399.00</span>
+        <span>¥{{tradeInfo.totalAmount}}</span>
       </div>
       <div class="receiveInfo">
         寄送至:
-        <span>北京市昌平区宏福科技园综合楼6层</span>
+        <span>{{selectedAddr.userAddress}}</span>
         收货人：
-        <span>张三</span>
-        <span>15010658793</span>
+        <span>{{selectedAddr.consignee}}</span>
+        <span>{{selectedAddr.phoneNum}}</span>
       </div>
     </div>
     <div class="sub clearFix">
       <!-- <router-link class="subBtn" to="/pay">提交订单</router-link> -->
-      <a href="javascript:;" class="subBtn" @click="toPay">提交订单</a>
+      <a href="javascript:;" class="subBtn" @click="submitOrder">提交订单</a>
     </div>
   </div>
 </template>
@@ -100,11 +107,30 @@
 import { mapState } from 'vuex'
 export default {
   name: 'Trade',
+  data() {
+    return {
+      selectedAddr: {}, // 用来存储监视后发生变化的收件人信息对象
+      orderComment: '老板,轻快一点发货啦,谢谢啊!',
+    }
+  },
   // 计算属性
   computed: {
     ...mapState({
       tradeInfo: (state) => state.order.tradeInfo,
     }),
+  },
+  watch: {
+    // 可以直接监视这个数组,数组中的对象数据变化后,再进行操作---保存这个数据
+    'tradeInfo.userAddressList'(value) {
+      // value-->就是这个数组数据
+      // 如果当前这个数组中某个地址信息对象的isDefault是'1'的情况下,说明这个对象最终展示出来的收件人的相关信息,应该被选中
+      const defaultAddr = value.find((addr) => addr.isDefault === '1')
+      // 判断该数据是否存在
+      if (defaultAddr) {
+        // 先保存这个数据
+        this.selectedAddr = defaultAddr
+      }
+    },
   },
   // 界面的加载后的生命周期回调
   mounted() {
@@ -113,10 +139,31 @@ export default {
   },
   methods: {
     // 支付的操作---跳转到支付的界面
-    toPay(){
-      this.$router.push('/pay')
-    }
-  }
+    async submitOrder() {
+      // 收集数据---获取订单详情的编号和 商品信息数组
+      const { tradeNo, detailArrayList } = this.tradeInfo
+      // 收集数据---收件人的信息
+      const { consignee, userAddress, phoneNum } = this.selectedAddr
+      const orderInfo = {
+        consignee, // 收件人的名字
+        consigneeTel: phoneNum, // 收件人的电话
+        deliveryAddress: userAddress, // 收件人的地址
+        paymentWay: 'ONLINE', // 支付方式,默认是在线支付
+        orderComment: this.orderComment, // 支付的备注信息
+        orderDetailList: detailArrayList, // 订单中的商品信息数组(订单中买的所有的商品,每个商品都是一个对象,一个订单中有多个商品)
+      }
+      // 调用api接口,并接收返回来的订单信息数据
+      const result = await this.$API.reqSubmitOrder(tradeNo, orderInfo)
+      if(result.code===200){
+        // 获取订单的id值
+        const orderId = result.data
+         // 跳转到支付的界面/pay中,同时携带订单的id值
+         this.$router.push({path:'/pay',query:{orderId}})
+      }else{
+        alert('订单提交失败了')
+      }
+    },
+  },
 }
 </script>
 
@@ -248,7 +295,6 @@ export default {
     .detail {
       width: 1080px;
 
-     
       padding: 15px;
       margin: 2px auto 0;
 
@@ -263,10 +309,10 @@ export default {
         margin: 5px 0;
         li {
           line-height: 30px;
-          
-          img{
-            width:100px;
-            height:100px;
+
+          img {
+            width: 100px;
+            height: 100px;
           }
 
           p {
