@@ -72,7 +72,8 @@
     ></el-pagination>
 
     <!--对话框的结构-->
-    <el-dialog title="添加" :visible="isShowDialog" :before-close="()=>isShowDialog = false">
+    <!-- <el-dialog title="添加" :visible="isShowDialog" :before-close="()=>isShowDialog = false"> -->
+       <el-dialog title="添加" :visible.sync="isShowDialog" >
       <el-form :model="form" style="width:80%" :rules="rules" ref="trademarkForm">
         <el-form-item label="品牌名称" :label-width="formLabelWidth" prop="tmName">
           <el-input v-model="form.tmName" autocomplete="off" placeholder="请输入品牌名称"></el-input>

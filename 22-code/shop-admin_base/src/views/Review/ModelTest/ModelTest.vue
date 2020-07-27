@@ -7,9 +7,10 @@
     -->
     <input type="text" v-model="msg" />
     <p>{{msg}}</p>
+
     <hr />
     <!-- 原生标签上使用的本质 -->
-    <input type="text" :value="msg2" @input="msg2 = $event.target.value" />
+    <input type="text" :value="msg2" @input="msg2=$event.target.value" />
     <p>{{msg2}}</p>
 
     <hr />
@@ -18,11 +19,12 @@
     <p>{{msg3}}</p>
 
     <hr />
-
-    <CustomInput :value="msg4" @input="msg4 = $event" />
+    <CustomInput :value="msg4" @input="msg4=$event" />
     <p>{{msg4}}</p>
   </div>
 </template>
+
+
 
 <script type="text/ecmascript-6">
 import CustomInput from './CustomInput.vue'
@@ -33,11 +35,11 @@ export default {
       msg: 'abcdef',
       msg2: '12345',
       msg3: 'hello',
-      msg4: 'world'
+      msg4: 'world',
     }
   },
   components: {
-    CustomInput
-  }
+    CustomInput,
+  },
 }
 </script>

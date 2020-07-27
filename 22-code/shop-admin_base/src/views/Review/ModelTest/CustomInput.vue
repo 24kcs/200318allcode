@@ -13,5 +13,6 @@
 export default {
   name: 'CustomInput',
   props:['value']
+
 }
 </script>

@@ -6,25 +6,25 @@
 </template>
 
 <script>
-import {cpMixin} from './mixins' 
+// 引入混合文件(混入)
+import { cpMixin } from './mixins'
 export default {
   name: 'Daughter',
-  mixins:[cpMixin],
+  mixins: [cpMixin],
   data() {
     return {
-      money: 20000
+      money: 20000,
     }
   },
   methods: {
-    
     // pullMoney(money) {
     //   this.money -= money
     // },
-    //  gaveMoney(money){
-    //   this.money-=money
-    //   // $parement----父级组件----下面的操作最好是父子组件通过一个方式来进行通信(比如:函数)
-    //   this.$parent.money+=money
-    // }
-  }
+    // gaveMoney(money) {
+    //   this.money -= money
+    //   // 修改父级组件的数据
+    //   this.$parent.money += money
+    // },
+  },
 }
 </script>

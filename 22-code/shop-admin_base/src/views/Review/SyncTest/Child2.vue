@@ -2,7 +2,7 @@
   <div>
     <span>小明每次花100元</span>
     <button @click="$emit('input',value-100)">花钱</button>
-    爸爸还剩 {{value}} 元
+    爸爸还剩{{value}}元
   </div>
 </template>
 

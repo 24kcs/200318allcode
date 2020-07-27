@@ -23,39 +23,45 @@ export default {
   name: 'ChildrenParentTest',
   data() {
     return {
-      money: 1000
+      money: 1000,
     }
   },
   components: {
     Son,
-    Daughter
+    Daughter,
   },
   methods: {
-    // 向儿子借钱
+    // 主动的找儿子借钱
     borrowMoney1() {
-      // 父级组件直接操作子级组件中的数据----不推荐
+      // 父级组件直接调用子级组件的数据进行操作
+      // 直接修改子级的数据
       // this.$refs.son.money -= 100
-      // 操作数据的组件是子级组件本身
+
+      // 比较好的方式:子级组件中有修改数据的方法,让父级组件来调用
       this.$refs.son.pullMoney(100)
       this.money += 100
     },
+
+    // 找女儿借钱
     borrowMoney2() {
+      // 父级组件直接调用子级组件的数据进行操作
+      // 直接修改子级的数据
+      // this.$refs.son.money -= 100
+
+      // 比较好的方式:子级组件中有修改数据的方法,让父级组件来调用
       this.$refs.dau.pullMoney(200)
       this.money += 200
     },
-    // 向所有的孩子借钱
+
+    // 找所有的子女借钱
     borrowMoney3() {
-      // 如果有多个子级组件
-      // this.$refs.son.pullMoney(500)
-      // this.$refs.dau.pullMoney(500)
-      // 获取的是所有的子级组件
-      this.$children.forEach(child=>{
+      // 把所有的子级组件都获取到----$children
+      this.$children.forEach((child) => {
         child.pullMoney(500)
-        this.money+=1000
+        this.money += 500
       })
-     
-    }
-  }
+    },
+  },
 }
 </script>
 
