@@ -2,7 +2,7 @@
   <div>
     <!--三级分类的-->
     <el-card style="margin-bottom:20px">
-      <CategorySelector @changeCategory="changeCategory" />
+      <CategorySelector @changeCategory="changeCategory" ref="cs" />
     </el-card>
     <!--按钮和表格-->
     <el-card>
@@ -148,6 +148,12 @@ export default {
       )
     },
   },
+  watch: {
+    // 影响到 添加(修改)平台属性界面的显示或者隐藏,同时也影响到分类组件中的三个下拉框是否禁用
+    isShowAttr(val) {
+      this.$refs.cs.isDisabled = !val
+    },
+  },
   methods: {
     async getAttrList() {
       // 调用api接口获取平台属性数据信息
@@ -246,7 +252,15 @@ export default {
     // 保存按钮的点击事件---更新平台属性的操作
     async updateAttr() {
       // 干掉属性值对象中的edit属性
-      this.formAttr.attrValueList.forEach((value) => delete value.edit)
+      // this.formAttr.attrValueList.forEach((value) => delete value.edit)
+      this.formAttr.attrValueList = this.formAttr.attrValueList.filter(
+        (value) => {
+          // 干掉edit属性
+          delete value.edit
+          // 只保留非空的数据,干掉空的数据
+          return !!value.valueName.trim()
+        }
+      )
       // 收集数据
       // console.log(this.formAttr)
       // 调用接口

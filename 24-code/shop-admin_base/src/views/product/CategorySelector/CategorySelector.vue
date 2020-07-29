@@ -4,7 +4,7 @@
     <!--表单项-->
     <el-form-item label="一级分类">
       <!--一级分类-->
-      <el-select v-model="form.category1Id" placeholder="请选择" @change="changeCategory1List">
+      <el-select v-model="form.category1Id" placeholder="请选择" @change="changeCategory1List" :disabled="isDisabled">
         <!--遍历一级分类信息数据-->
         <el-option v-for="item in category1List" :key="item.id" :label="item.name" :value="item.id"></el-option>
       </el-select>
@@ -13,7 +13,7 @@
     <!--表单项-->
     <el-form-item label="二级分类">
       <!--二级分类-->
-      <el-select v-model="form.category2Id" placeholder="请选择" @change="changeCategory2List">
+      <el-select v-model="form.category2Id" placeholder="请选择" @change="changeCategory2List" :disabled="isDisabled">
         <!--遍历二级分类信息数据-->
         <el-option v-for="item in category2List" :key="item.id" :label="item.name" :value="item.id"></el-option>
       </el-select>
@@ -22,7 +22,7 @@
     <!--表单项-->
     <el-form-item label="三级分类">
       <!--三级分类-->
-      <el-select v-model="form.category3Id" placeholder="请选择" @change="changeCategory3List">
+      <el-select v-model="form.category3Id" placeholder="请选择" @change="changeCategory3List" :disabled="isDisabled">
         <!--遍历二级分类信息数据-->
         <el-option v-for="item in category3List" :key="item.id" :label="item.name" :value="item.id"></el-option>
       </el-select>
@@ -42,6 +42,7 @@ export default {
       category1List: [], // 一级分类的列表数组数据
       category2List: [], // 二级分类的列表数组数据
       category3List: [], // 三级分类的列表数组数据
+      isDisabled:false // 默认是false,三个下拉框都可以正常的使用,如果为true,则下拉框禁用
     }
   },
   // 界面加载后的生命周期回调
