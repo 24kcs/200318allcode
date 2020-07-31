@@ -49,7 +49,7 @@
         ></el-pagination>
       </div>
       <!--修改Spu信息的组件-->
-      <SpuForm :visible.sync="isShowSpuForm" ref="spuForm" />
+      <SpuForm :visible.sync="isShowSpuForm" ref="spuForm" @success="success" />
 
       <!--
 
@@ -145,6 +145,13 @@ export default {
       this.isShowSpuForm = true // 展示SpuForm组件界面
       // 调用SpuForm组件中的initUpdateData()方法,并传入spuId数据
       this.$refs.spuForm.initUpdateData(spuInfo.id)
+    },
+
+
+    // 更新数据成功的自定义事件的回调函数
+    success(){
+      // 重新获取当前界面的数据
+      this.getSpuList()
     }
   },
 }
