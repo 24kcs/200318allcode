@@ -84,6 +84,20 @@ export const constantRoutes = [
       {
         path: 'scope-slot',
         component: () => import('@/views/Review/ScopeSlotTest/ScopeSlotTest')
+      },
+      {
+        path: 'test',
+        component: () => import('@/views/Review/Test/Test'),
+        children: [
+          {
+            path: 'test1',
+            component: () => import('@/views/Review/Test/Test1'),
+          },
+          {
+            path: 'test2',
+            component: () => import('@/views/Review/Test/Test2'),
+          }
+        ]
       }
     ]
   }
@@ -109,7 +123,7 @@ const router = createRouter()
 
 // 向外暴露重置路由器的matcher的函数
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
+export function resetRouter () {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router
 }

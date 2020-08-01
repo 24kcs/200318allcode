@@ -24,7 +24,13 @@
           <el-table-column label="操作">
             <template slot-scope="{row,$index}">
               <!--添加SKU的按钮-->
-              <HintButton title="添加SKU" type="primary" icon="el-icon-plus" size="mini" @click="showAddSku(row)" />
+              <HintButton
+                title="添加SKU"
+                type="primary"
+                icon="el-icon-plus"
+                size="mini"
+                @click="showAddSku(row)"
+              />
               <!--修改SPU的按钮-->
               <HintButton
                 title="修改SPU"
@@ -34,9 +40,15 @@
                 @click="showUpdateSpu(row)"
               />
               <!--查看已有的SKU的按钮-->
-              <HintButton title="查看已有的SKU" type="info" icon="el-icon-info" size="mini" />
+              <HintButton
+                title="查看已有的SKU"
+                type="info"
+                icon="el-icon-info"
+                size="mini"
+                @click="showSkuList(row)"
+              />
               <!--删除SPU的按钮-->
-              <el-popconfirm title="`确定要删除  吗`">
+              <el-popconfirm :title="`确定要删除 ${row.spuName} 吗`" @onConfirm="deleteSpu(row)">
                 <HintButton
                   slot="reference"
                   title="删除SPU"
@@ -73,8 +85,27 @@
       -->
 
       <!--添加Sku操作的组件-->
-      <SkuForm v-show="isShowSkuForm" ref="skuForm" @cancel="isShowSkuForm=false" />
+      <SkuForm
+        v-show="isShowSkuForm"
+        ref="skuForm"
+        @success="isShowSkuForm=false"
+        @cancel="isShowSkuForm=false"
+      />
     </el-card>
+
+    <!--对话框,用来展示sku列表数据-->
+    <el-dialog :title="spuName+'---->SKU列表数据'" :visible.sync="isShowSkuList">
+      <el-table :data="skuList">
+        <el-table-column property="skuName" label="名称" width="150"></el-table-column>
+        <el-table-column property="price" label="价格(元)" width="200"></el-table-column>
+        <el-table-column property="weight" label="重量(千克)"></el-table-column>
+        <el-table-column property="skuDefaultImg" label="默认图片">
+          <template slot-scope="{row,$index}">
+            <img :src="row.skuDefaultImg" alt="图片" width="100" height="100" />
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -94,7 +125,11 @@ export default {
       category3Id: '', // 三级分类的id
       isShowSpuForm: false, // 默认不显示修改spuForm界面,如果为true则显示了
       spuId: '', // 用来存储当前的spu的id数据
-      isShowSkuForm:false // 默认不显示添加skuForm界面,如果为true则显示了
+      isShowSkuForm: false, // 默认不显示添加skuForm界面,如果为true则显示了
+
+      isShowSkuList: false, // 不显示sku列表对话框
+      skuList: [], // 用来存储当前的spu中的所有的sku列表数据数组
+      spuName:'' , // 用来存储spu的名字
     }
   },
   components: {
@@ -102,9 +137,9 @@ export default {
     SkuForm,
   },
   watch: {
-    isShowSpuForm(val){
+    isShowSpuForm(val) {
       this.$refs.cs.isDisabled = val
-    }
+    },
   },
   methods: {
     // 分类组件中,切换选择分类信息的时候,分发的自定义事件的回调函数
@@ -197,19 +232,41 @@ export default {
       this.$refs.spuForm.initAddData(this.category3Id)
     },
 
-
     // 添加Sku的操作
-    showAddSku(spuInfo){
+    showAddSku(spuInfo) {
       this.isShowSkuForm = true
       // 解构spuInfo对象数据,并添加一级分类的id和二级分类的id数据
-      spuInfo={
+      spuInfo = {
         ...spuInfo,
-        category1Id:this.category1Id,
-        category2Id:this.category2Id
+        category1Id: this.category1Id,
+        category2Id: this.category2Id,
       }
       // 调用SkuForm组件内部的initAddData方法,并传入spuInfo对象数据
       this.$refs.skuForm.initAddData(spuInfo)
-    }
+    },
+
+    // 删除spu操作
+    async deleteSpu(spuInfo) {
+      const result = await this.$API.spu.deleteSpu(spuInfo.id)
+      if (result.code === 200) {
+        this.$message.success('删除spu成功')
+        // 更新一下数据
+        this.getSpuList(this.page)
+      } else {
+        this.$message.error('删除spu失败')
+      }
+    },
+
+    // 查看Sku列表数据
+    async showSkuList(spuInfo) {
+      this.spuName = spuInfo.spuName
+      // 显示sku列表的对话框
+      this.isShowSkuList = true
+      // 获取sku列表数据
+      const result = await this.$API.sku.getSkuListBySpuId(spuInfo.id)
+      // 更新skuList数组数据
+      this.skuList = result.data
+    },
   },
 }
 </script>

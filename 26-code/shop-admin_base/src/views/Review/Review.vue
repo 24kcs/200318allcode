@@ -7,6 +7,7 @@
     <router-link to="/review/attrs-listeners">$attrs与$listeners</router-link>&nbsp;&nbsp;
     <router-link to="/review/children-parent">$children与$parent</router-link>&nbsp;&nbsp;
     <router-link to="/review/scope-slot">作用域插槽scope-slot</router-link>&nbsp;&nbsp;
+     <router-link to="/review/test">生命周期</router-link>&nbsp;&nbsp;
     <hr>
     <router-view></router-view>
   </div>
